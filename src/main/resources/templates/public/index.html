@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head th:replace="layout/head::head"></head>
+
+<body>
+
+	<div th:replace="/layout/header :: header"></div>
+
+	<div id="flex-box">
+		<div id="grid">
+
+			<div th:each="carta : ${cartas}" class="carta">
+				<img th:src="@{/img/{img}(img=${carta.img})}"
+					th:alt="${carta.nombreCarta}" class="carta-img">
+				<h3 th:text="${carta.nombreCarta}"></h3>
+				<p>
+					Tipo: <span th:text="${carta.tipoCarta}"></span>
+				</p>
+				<p>
+					Coste: <span th:text="${carta.costeCarta}"></span>
+				</p>
+				<p>
+					Color: <span th:text="${carta.color}"></span>
+				</p>
+				<p>
+					Código: <span th:text="${carta.codigoCarta}"></span>
+				</p>
+				<p id="precioCarta">
+					Precio: <span
+						th:text="${#numbers.formatDecimal(carta.precioCarta, 2,2)}"></span>€
+				</p>
+
+				<div th:if="${usuarioLogueado}">
+					<form th:action="@{/carrito/add}" method="POST">
+
+						<div class="cantidad-controles">
+							
+							<button type="button" class="btn-menos" th:data-id="${carta.id}">-</button>
+
+							<input type="number" th:id="'cantidad-' + ${carta.id}"
+								th:name="cantidad" min="1"
+								th:max="${carta.cantidad}" value="1"
+								th:data-id="${cantidad}">
+
+							<button type="button" class="btn-mas" th:data-id="${carta.id}">+</button>
+
+						</div>
+
+						<input type="hidden" name="idCarta" th:value="${carta.id}">
+						
+						<button type="submit">Añadir a carrito</button>
+					</form>
+
+				</div>
+
+				<div th:if="${!usuarioLogueado}">
+					<p>
+						Cantidad: <span th:text="${carta.cantidad}"></span>
+					</p>
+					<form>
+						<button type="submit" disabled>Añadir a carrito</button>
+						<p style="color: red;">Inicia sesión para añadir al carrito</p>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+<script th:src="@{/js/index.js}"></script>
+<div th:replace="layout/footer :: footer"></div>
+</html>

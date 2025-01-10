@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="login" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/login.css">
+    <script src="/js/loadout.js" defer></script>
+</head>
+
+<body>
+
+    <form id="formLogin" th:action="@{/login}" action="#" method="post">
+        <img src="img/logo.webp" id="logo">
+
+        <label for="username">Email:</label>
+        <input type="text" name="username" id="username" placeholder="Inserta tu correo" required><br>
+
+        <label for="password">Contraseña:</label>
+        <input type="password" name="password" id="password" placeholder="Inserte la contraseña" required><br>
+
+        <div id="mensajeError" th:if="${param.error}" class="alert alert-danger" role="alert">
+            <p th:text="'Usuario o contraseña incorrectos. Inténtalo de nuevo.'"></p>
+        </div>
+
+        <input type="submit" value="Enviar">
+        
+        <p>¿No tienes una cuenta? <a href="registro">Registrate pinchado encima</a>.</p>
+    </form>
+</body>
+
+</html>

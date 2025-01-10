@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/registro.css">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <script src="/js/loadout.js" defer></script>
+
+</head>
+
+<body>
+    <div id="formLogin">
+        <img id="logo" src="img/logo.webp" alt="Logo">
+        <form action="#" th:action="@{/registro/submit}" th:object="${usuarioNuevo}" method="post">
+
+            <label for="nombre">Nombre</label>
+            <input type="text" th:field="*{nombre}" id="nombre" name="nombre" placeholder="Introduce tu nombre" required>
+
+            <label for="apellido">Apellidos</label>
+            <input type="text" th:field="*{apellido}" id="apellido" name="apellido" placeholder="Introduce tu apellido" required>
+
+            <label for="email">Email</label>
+            <input type="text" th:field="*{email}" id="email" name="email" placeholder="Introduce tu correo" required>
+
+            <label for="dni">DNI</label>
+            <input type="text" th:field="*{dni}" id="dni" name="dni" placeholder="Introduce tu DNI" required>
+
+            <label for="direccion">Direccion</label>
+            <input type="text" th:field="*{direccion}" id="direccion" name="direccion" placeholder="Introduce tu direccion" required>
+
+            <label for="telefono">Telefono</label>
+            <input type="text" th:field="*{telefono}" id="telefono" name="telefono" placeholder="Introduce tu numero de telefono" required>
+
+            <label for="contra">Contraseña</label>
+            <input type="password" th:field="*{contraseña}" id="contra" name="contra" placeholder="Introduce tu contraseña" required>
+
+            <label for="confirmacion_contra">Confirma Contraseña</label>
+            <input type="password" id="confirmacion_contra" name="confirmacion_contra"
+                placeholder="Confirma tu contraseña" required>
+
+                <div id="mensajeError" th:if="${param.error}" class="alert alert-danger" role="alert">
+                    <p th:text="'Confirma contraseña o rellena algun campo vacio'"></p>
+                </div>
+
+            <input type="submit" value="Register">
+        </form>
+
+        <p>Ya tienes una cuenta <a href="login">Inicia Sesion</a>.</p>
+    </div>
+</body>
+
+</html>

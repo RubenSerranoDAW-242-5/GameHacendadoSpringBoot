@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Usuario</title>
+    <link rel="stylesheet" href="../assets/css/perfil.css">
+
+    <head th:replace="layout/head::head"></head>
+</head>
+
+<body>
+    <div th:replace="layout/header :: header"></div>
+
+    <div th:if="${usuario != null}" class="usuario">
+        <h3>Actualizar Información de Usuario y Visualización</h3>
+        <form th:action="@{/perfil/edit}" method="post">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" th:value="${usuario.nombre}" required>
+
+            <label for="apellido">Apellido:</label>
+            <input type="text" id="apellido" name="apellido" th:value="${usuario.apellido}" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" th:value="${usuario.email}" required>
+
+            <label for="dni">DNI:</label>
+            <input type="text" id="dni" name="dni" th:value="${usuario.dni}" required>
+
+            <label for="contra">Contraseña:</label>
+            <input type="password" id="contra" name="contra" placeholder="Introduzca nueva contraseña si quiere cambiarla">
+
+            <label for="direccion">Dirección:</label>
+            <input type="text" id="direccion" name="direccion" th:value="${usuario.direccion}" required>
+
+            <label for="telefono">Teléfono:</label>
+            <input type="text" id="telefono" name="telefono" th:value="${usuario.telefono}" required>
+
+            <input type="submit" value="Actualizar Datos">
+        </form>
+    </div>
+    <div th:if="${usuario == null}">
+        <p class="no-datos">No se encontraron datos de usuario.</p>
+    </div>
+</body>
+
+</html>
