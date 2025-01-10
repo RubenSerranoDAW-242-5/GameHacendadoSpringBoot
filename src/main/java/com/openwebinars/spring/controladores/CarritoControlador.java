@@ -38,7 +38,7 @@ public class CarritoControlador {
     private HttpSession sesion;
 
     @Autowired
-	private CartaServicio bdCarta;
+    private CartaServicio bdCarta;
 
     @GetMapping("/carrito")
     public String carrito(Model model) {
@@ -57,6 +57,21 @@ public class CarritoControlador {
         }
 
         return "public/carrito";
+    }
+
+    @GetMapping("/carrito/empty")
+    public String getMethodName(@RequestParam String param) {
+        Long id = (Long) sesion.getAttribute("IdPedido");
+        List<LineaPedidos> listaLineaPedidos = bdlineaPedidos.findByPedidoId(id);
+        for (LineaPedidos lineaPedidos : listaLineaPedidos) {
+            bdlineaPedidos.delete(lineaPedidos.getId());
+        }
+        Pedidos p = bdPedidos.findById(id);
+        p.setPrecioTotal(0);
+        bdPedidos.edit(p);
+        sesion.setAttribute("contador_carrito", 0);
+        
+        return "redirect:/carrito";
     }
 
     @PostMapping("/carrito/add")
