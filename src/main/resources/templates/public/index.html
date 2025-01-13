@@ -10,7 +10,7 @@
 	<div id="flex-box"	>
 		<div id="grid">
 
-			<div th:each="carta : ${cartas}" class="carta">
+			<div th:each="carta : ${cartas}" class="carta" th:classappend="${carta.cantidad == 0} ? 'out-of-stock' : ''">
 				<img th:src="@{/img/{img}(img=${carta.img})}"
 					th:alt="${carta.nombreCarta}" class="carta-img">
 				<h3 th:text="${carta.nombreCarta}"></h3>
@@ -36,20 +36,20 @@
 
 						<div class="cantidad-controles">
 							
-							<button type="button" class="btn-menos" th:data-id="${carta.id}">-</button>
+							<button type="button" class="btn-menos" th:data-id="${carta.id}" th:disabled="${carta.cantidad == 0}">-</button>
 
 							<input type="number" th:id="'cantidad-' + ${carta.id}"
 								th:name="cantidad" min="1"
 								th:max="${carta.cantidad}" value="1"
-								th:data-id="${cantidad}">
+								th:data-id="${cantidad}" th:disabled="${carta.cantidad == 0}">
 
-							<button type="button" class="btn-mas" th:data-id="${carta.id}">+</button>
+							<button type="button" class="btn-mas" th:data-id="${carta.id}" th:disabled="${carta.cantidad == 0}">+</button>
 
 						</div>
 
 						<input type="hidden" name="idCarta" th:value="${carta.id}">
 						
-						<button type="submit">Añadir a carrito</button>
+						<button type="submit" th:disabled="${carta.cantidad == 0}">Añadir a carrito</button>
 					</form>
 
 				</div>

@@ -171,3 +171,11 @@ body {
     cursor: not-allowed;
     /* Cursor de no permitido */
 }
+.carta.out-of-stock {
+    opacity: 0.5;
+}
+
+.carta.out-of-stock button,
+.carta.out-of-stock input[type="number"] {
+    cursor: not-allowed;
+}

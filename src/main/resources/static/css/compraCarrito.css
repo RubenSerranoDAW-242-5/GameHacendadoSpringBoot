@@ -1,9 +1,10 @@
 /* Estilos generales */
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: #f5f5f5;
+    background-color: #f4f4f9;
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 h1 {
@@ -49,7 +50,7 @@ tbody tr:hover {
 }
 
 /* Estilo del formulario de edición */
-form {
+.finalizar-pedido {
     margin-top: 30px;
     background-color: #fff;
     padding: 20px;
@@ -60,14 +61,6 @@ label {
     display: block;
     margin: 10px 0 5px;
     font-weight: bold;
-}
-
-input[type="text"], input[type="email"] {
-    width: calc(100% - 22px); /* Asegura que el input tenga un ancho completo */
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-bottom: 15px;
 }
 
 button {
@@ -91,4 +84,126 @@ a {
 
 a:hover {
     text-decoration: underline; /* Subrayar al pasar el ratón */
+}
+
+.contenedor-recibo {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #00bfff;
+    border-radius: 8px;
+    box-shadow: 0px 2px 10px rgba(0, 123, 255, 0.2);
+}
+
+.recibo-header {
+    margin-bottom: 20px;
+}
+
+.recibo-header p {
+    margin: 5px 0;
+    font-size: 16px;
+}
+
+.tabla-recibo {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.tabla-recibo th,
+.tabla-recibo td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.tabla-recibo th {
+    background-color: #007bff;
+    color: white;
+}
+
+.tabla-recibo tfoot td {
+    font-weight: bold;
+}
+
+.botonFinalizarCompra {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.botonFinalizarCompra:hover {
+    background-color: #0056b3;
+    box-shadow: 0px 4px 12px rgba(0, 123, 255, 0.4);
+}
+
+.compra-contenedor-recibo {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #00bfff;
+    border-radius: 8px;
+    box-shadow: 0px 2px 10px rgba(0, 123, 255, 0.2);
+}
+
+.compra-recibo-header {
+    margin-bottom: 20px;
+}
+
+.compra-recibo-header p {
+    margin: 5px 0;
+    font-size: 16px;
+}
+
+.compra-tabla-recibo {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.compra-tabla-recibo th,
+.compra-tabla-recibo td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.compra-tabla-recibo th {
+    background-color: #007bff;
+    color: white;
+}
+
+.compra-tabla-recibo tfoot td {
+    font-weight: bold;
+}
+
+.compra-botonFinalizarCompra {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.compra-botonFinalizarCompra:hover {
+    background-color: #0056b3;
+    box-shadow: 0px 4px 12px rgba(0, 123, 255, 0.4);
+}
+
+.compra-input {
+    display: none;
 }

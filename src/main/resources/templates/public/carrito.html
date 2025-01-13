@@ -15,7 +15,7 @@
 
     <div class="container">
         <h1>Carrito de Compras</h1>
-        <div th:if="${pedido != null}">
+        <div th:if="${pedido != null && listaLineaPedidos.size() > 0}">
             <div class="pedido-detalles">
                 <h4 th:text="'Pedido ID: ' + ${pedido.id}"></h4>
                 <p th:text="'Precio total del pedido: ' + ${#numbers.formatDecimal(pedido.precioTotal, 2, 2)} + ' €'">
@@ -23,7 +23,9 @@
                 <p th:text="'Dirección de envío: ' + ${pedido.direccionEnvio}"></p>
             </div>
             <div th:each="lineaPedido : ${listaLineaPedidos}">
-                <form th:action="@{/carrito/delete}" method="post">
+                <form
+                    th:action="@{/carrito/eliminar?cantidadSeleccionada=${lineaPedido.cantidad}&idCarta=${lineaPedido.carta.id}&idPedido=${pedido.id}}"
+                    method="get">
                     <div class="linea-pedido">
                         <div class="carta-detalles">
                             <img th:src="@{/img/{img}(img=${lineaPedido.carta.img})}"
@@ -48,10 +50,8 @@
                             </p>
                         </div>
                         <div>
-                            <input type="hidden" name="eliminar" value="eliminar_carta">
-                            <input type="hidden" th:name="idCarta" th:value="${lineaPedido.carta.id}">
-                            <input type="hidden" th:name="idPedido" th:value="${pedido.id}">
-                            <input type="hidden" th:name="eliminarIdLineaPedido" th:value="${lineaPedido.id}">
+                            <input type="hidden" name="idCarta" th:value="${lineaPedido.carta.id}">
+                            <input type="hidden" name="idPedido" th:value="${pedido.id}">
                             <button type="submit" class="botonEliminarCarrito">Eliminar</button>
                         </div>
                     </div>
@@ -59,17 +59,17 @@
             </div>
             <form th:action="@{/carrito/empty}" method="post">
                 <div>
-                    <input type="hidden" name="eliminar" value="eliminar_pedido">
                     <input type="hidden" th:name="idPedido" th:value="${pedido.id}">
                     <button type="submit" class="botonVaciar">Vaciar Carrito</button>
                 </div>
             </form>
-            <form th:action="@{/compraCarrito?idPedido={id}(id=${pedido.id})}" method="get">
+            <form th:action="@{/compra}" method="get">
+                <input type="hidden" name="idPedido" th:value="${pedido.id}">
                 <button type="submit" class="botonCompra">Comprar Ahora</button>
             </form>
             <img src="/img/metodospago.png" id="imagenPago" alt="Métodos de pago">
         </div>
-        <div th:if="${pedido == null}">
+        <div th:if="${pedido != null || listaLineaPedidos.size() > 0}">
             <h1>Tu carrito está vacío</h1>
         </div>
     </div>

@@ -59,18 +59,42 @@ public class CarritoControlador {
         return "public/carrito";
     }
 
-    @GetMapping("/carrito/empty")
-    public String getMethodName(@RequestParam String param) {
-        Long id = (Long) sesion.getAttribute("IdPedido");
-        List<LineaPedidos> listaLineaPedidos = bdlineaPedidos.findByPedidoId(id);
+    @PostMapping("/carrito/empty")
+    public String CarritoVacio(@RequestParam(value = "idPedido") Long idPedido) {
+
+        List<LineaPedidos> listaLineaPedidos = bdlineaPedidos.findByPedidoId(idPedido);
+
         for (LineaPedidos lineaPedidos : listaLineaPedidos) {
             bdlineaPedidos.delete(lineaPedidos.getId());
         }
-        Pedidos p = bdPedidos.findById(id);
+        Pedidos p = bdPedidos.findById(idPedido);
         p.setPrecioTotal(0);
         bdPedidos.edit(p);
         sesion.setAttribute("contador_carrito", 0);
-        
+
+        return "redirect:/";
+    }
+
+    @GetMapping("/carrito/eliminar")
+    public String EliminarCarta(@RequestParam(value = "idCarta") Long idCarta,
+            @RequestParam(value = "cantidadSeleccionada") Integer cantidad,
+            @RequestParam(value = "idPedido") Long idPedido, Model model) {
+
+        List<LineaPedidos> listaLineaPedidos = bdlineaPedidos.findByPedidoId(idPedido);
+
+        for (LineaPedidos lineaPedidos : listaLineaPedidos) {
+            if (lineaPedidos.getCarta().getId() == idCarta) {
+                if (lineaPedidos.getCantidad() > cantidad) {
+                    lineaPedidos.setCantidad(lineaPedidos.getCantidad() - cantidad);
+                    lineaPedidos.setPrecioTotalLinea(
+                            lineaPedidos.getPrecioTotalLinea() - (lineaPedidos.getCarta().getPrecioCarta() * cantidad));
+                    bdlineaPedidos.edit(lineaPedidos);
+                } else {
+                    bdlineaPedidos.delete(lineaPedidos.getId());
+                }
+            }
+        }
+
         return "redirect:/carrito";
     }
 
@@ -80,7 +104,6 @@ public class CarritoControlador {
 
         Carta carta = bdCarta.findById(IdCarta);
         Usuario u = bdUsuario.findById((Long) sesion.getAttribute("id"));
-
         Pedidos p;
         if (bdPedidos.findByEstado(EstadoPedido.EN_PROCESO, u.getId()) != null) {
             p = bdPedidos.findByEstado(EstadoPedido.EN_PROCESO, u.getId());
@@ -89,12 +112,12 @@ public class CarritoControlador {
             bdPedidos.add(p);
         }
 
-        LineaPedidos existegLinea = bdlineaPedidos.findByCartaId(carta.getId());
+        LineaPedidos existeLinea = bdlineaPedidos.findByCartaIdAndPedidoId(carta.getId(), p.getId());
 
-        if (existegLinea != null) {
-            existegLinea.setCantidad(existegLinea.getCantidad() + cantidad);
-            existegLinea.setPrecioTotalLinea(existegLinea.getPrecioTotalLinea() + (carta.getPrecioCarta() * cantidad));
-            bdlineaPedidos.add(existegLinea);
+        if (existeLinea != null) {
+            existeLinea.setCantidad(existeLinea.getCantidad() + cantidad);
+            existeLinea.setPrecioTotalLinea(existeLinea.getPrecioTotalLinea() + (carta.getPrecioCarta() * cantidad));
+            bdlineaPedidos.edit(existeLinea);
         } else {
             LineaPedidos linea = new LineaPedidos(cantidad, (carta.getPrecioCarta() * cantidad), p, carta);
             bdlineaPedidos.add(linea);

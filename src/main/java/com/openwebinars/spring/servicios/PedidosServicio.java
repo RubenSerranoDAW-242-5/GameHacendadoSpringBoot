@@ -45,8 +45,8 @@ public class PedidosServicio {
         return repositorio.findByUsuarioId(id);
     }
 
-    public Pedidos findByEstado(EstadoPedido estado, Long id) {
-        return repositorio.findByEstado(estado, id);
+    public Pedidos findByEstado(EstadoPedido estado, Long usuarioId) {
+        return repositorio.findByEstado(estado, usuarioId);
     }
 
     public Carta findCarta(Long c, Long u) {

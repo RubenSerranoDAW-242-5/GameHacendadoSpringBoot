@@ -14,4 +14,7 @@ public interface LineaPedidosRepositorio extends JpaRepository<LineaPedidos, Lon
 
     @Query("SELECT lp FROM LineaPedidos lp WHERE lp.pedido.id = ?1")
     public List<LineaPedidos> findByPedidoId(Long idPedido);
+    
+    @Query("SELECT lp FROM LineaPedidos lp WHERE lp.carta.id = ?1 AND lp.pedido.id = ?2")
+    public LineaPedidos findByCartaIdAndPedidoId(Long cartaId, Long pedidoId);
 }

@@ -21,52 +21,55 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class WebControlador {
 
-	@Autowired
-	private CartaServicio bdCarta;
+    @Autowired
+    private CartaServicio bdCarta;
 
-	@Autowired
-	private UsuarioServicio bdUsuario;
+    @Autowired
+    private UsuarioServicio bdUsuario;
 
-	@Autowired
-	private PedidosServicio bdPedidos;
+    @Autowired
+    private PedidosServicio bdPedidos;
 
-	@Autowired
-	private HttpSession sesion;
+    @Autowired
+    private HttpSession sesion;
 
-	@GetMapping("/")
-	public String index(Model model, HttpServletRequest request) {
+    @GetMapping("/")
+    public String index(Model model, HttpServletRequest request) {
 
-		List<Carta> cartas = bdCarta.findAll();
+        List<Carta> cartas = bdCarta.findAll();
 
-		model.addAttribute("currentUri", request.getRequestURI());
+        model.addAttribute("currentUri", request.getRequestURI());
 
-		model.addAttribute("cartas", cartas);
-		model.addAttribute("usuarioLogueado",
-				(sesion.getAttribute("usuarioLogueado") != null) ? sesion.getAttribute("usuarioLogueado") : false);
-		model.addAttribute("usuarioAdmin",
-				(sesion.getAttribute("usuarioAdmin") != null) ? sesion.getAttribute("usuarioAdmin") : false);
-		boolean log = (boolean) model.getAttribute("usuarioLogueado");
+        model.addAttribute("cartas", cartas);
+        model.addAttribute("usuarioLogueado",
+                (sesion.getAttribute("usuarioLogueado") != null) ? sesion.getAttribute("usuarioLogueado") : false);
+        model.addAttribute("usuarioAdmin",
+                (sesion.getAttribute("usuarioAdmin") != null) ? sesion.getAttribute("usuarioAdmin") : false);
+        boolean log = (boolean) model.getAttribute("usuarioLogueado");
 
-		if (log) {
-			Usuario u = bdUsuario.findById((Long) sesion.getAttribute("id"));
+        if (log) {
+            Usuario u = bdUsuario.findById((Long) sesion.getAttribute("id"));
 
-			if (bdPedidos.findByUsuarioId((Long) sesion.getAttribute("id")) != null) {
+            if (bdPedidos.findByEstado(EstadoPedido.EN_PROCESO,u.getId()) != null) {
 
-				Pedidos p = bdPedidos.findByEstado(EstadoPedido.EN_PROCESO, (Long) sesion.getAttribute("id"));
-				Integer contadorPedidos = bdPedidos.countPedidos(u, p);
+                Pedidos p = bdPedidos.findByEstado(EstadoPedido.EN_PROCESO, (Long) sesion.getAttribute("id"));
+                if (p != null) {
+                    Integer contadorPedidos = bdPedidos.countPedidos(u, p);
 
-				model.addAttribute("contador_carrito", contadorPedidos);
-				sesion.setAttribute("contador_carrito", contadorPedidos);
-				sesion.setAttribute("IdPedido", p.getId());
-			} else {
-				model.addAttribute("contador_carrito", 0);
-				sesion.setAttribute("contador_carrito", 0);
+                    model.addAttribute("contador_carrito", contadorPedidos);
+                    sesion.setAttribute("contador_carrito", contadorPedidos);
+                    sesion.setAttribute("IdPedido", p.getId());
+                } else {
+                    model.addAttribute("contador_carrito", 0);
+                    sesion.setAttribute("contador_carrito", 0);
+                }
+            } else {
+                model.addAttribute("contador_carrito", 0);
+                sesion.setAttribute("contador_carrito", 0);
+            }
+        }
 
-			}
-
-		}
-
-		return "public/index";
-	}
+        return "public/index";
+    }
 
 }

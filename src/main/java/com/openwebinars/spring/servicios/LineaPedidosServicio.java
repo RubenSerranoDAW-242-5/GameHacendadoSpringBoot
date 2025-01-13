@@ -44,4 +44,8 @@ public class LineaPedidosServicio {
     public List<LineaPedidos> findByPedidoId(long idPedido) {
         return repositorio.findByPedidoId(idPedido);
     }
+
+    public LineaPedidos findByCartaIdAndPedidoId(Long id, Long id2) {
+        return repositorio.findByCartaIdAndPedidoId(id, id2);
+    }
 }
