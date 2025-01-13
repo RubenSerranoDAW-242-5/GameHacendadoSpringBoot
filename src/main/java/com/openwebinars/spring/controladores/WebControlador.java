@@ -68,7 +68,7 @@ public class WebControlador {
                 sesion.setAttribute("contador_carrito", 0);
             }
         }
-
+		// hacer que al quedarse sin stock deshabilitar carta
         return "public/index";
     }
 
