@@ -65,6 +65,9 @@ public class CarritoControlador {
         List<LineaPedidos> listaLineaPedidos = bdlineaPedidos.findByPedidoId(idPedido);
 
         for (LineaPedidos lineaPedidos : listaLineaPedidos) {
+            Carta carta = lineaPedidos.getCarta();
+            carta.setCantidad(carta.getCantidad() + lineaPedidos.getCantidad());
+            bdCarta.edit(carta);
             bdlineaPedidos.delete(lineaPedidos.getId());
         }
         Pedidos p = bdPedidos.findById(idPedido);
@@ -81,9 +84,11 @@ public class CarritoControlador {
             @RequestParam(value = "idPedido") Long idPedido, Model model) {
 
         List<LineaPedidos> listaLineaPedidos = bdlineaPedidos.findByPedidoId(idPedido);
+        Pedidos p = bdPedidos.findById(idPedido);
 
         for (LineaPedidos lineaPedidos : listaLineaPedidos) {
             if (lineaPedidos.getCarta().getId() == idCarta) {
+                Carta carta = lineaPedidos.getCarta();
                 if (lineaPedidos.getCantidad() > cantidad) {
                     lineaPedidos.setCantidad(lineaPedidos.getCantidad() - cantidad);
                     lineaPedidos.setPrecioTotalLinea(
@@ -92,6 +97,10 @@ public class CarritoControlador {
                 } else {
                     bdlineaPedidos.delete(lineaPedidos.getId());
                 }
+                carta.setCantidad(carta.getCantidad() + cantidad);
+                bdCarta.edit(carta);
+                p.setPrecioTotal(p.getPrecioTotal() - (lineaPedidos.getCarta().getPrecioCarta() * cantidad));
+                bdPedidos.edit(p);
             }
         }
 
@@ -104,10 +113,9 @@ public class CarritoControlador {
 
         Carta carta = bdCarta.findById(IdCarta);
         Usuario u = bdUsuario.findById((Long) sesion.getAttribute("id"));
-        Pedidos p;
-        if (bdPedidos.findByEstado(EstadoPedido.EN_PROCESO, u.getId()) != null) {
-            p = bdPedidos.findByEstado(EstadoPedido.EN_PROCESO, u.getId());
-        } else {
+
+        Pedidos p = bdPedidos.findByEstado(EstadoPedido.EN_PROCESO, u.getId());
+        if (p == null) {
             p = new Pedidos(LocalDateTime.now(), 0, u.getDireccion(), EstadoPedido.EN_PROCESO, u);
             bdPedidos.add(p);
         }
@@ -124,6 +132,8 @@ public class CarritoControlador {
         }
 
         p.setPrecioTotal(p.getPrecioTotal() + (carta.getPrecioCarta() * cantidad));
+        carta.setCantidad(carta.getCantidad() - cantidad);
+        bdCarta.edit(carta);
         bdPedidos.edit(p);
 
         if (p.getId() != null) {

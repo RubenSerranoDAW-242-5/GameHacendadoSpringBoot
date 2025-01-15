@@ -52,7 +52,7 @@ public class WebControlador {
 
             if (bdPedidos.findByEstado(EstadoPedido.EN_PROCESO,u.getId()) != null) {
 
-                Pedidos p = bdPedidos.findByEstado(EstadoPedido.EN_PROCESO, (Long) sesion.getAttribute("id"));
+                Pedidos p = bdPedidos.findByEstado(EstadoPedido.EN_PROCESO, u.getId());
                 if (p != null) {
                     Integer contadorPedidos = bdPedidos.countPedidos(u, p);
 
@@ -68,7 +68,6 @@ public class WebControlador {
                 sesion.setAttribute("contador_carrito", 0);
             }
         }
-		// hacer que al quedarse sin stock deshabilitar carta
         return "public/index";
     }
 

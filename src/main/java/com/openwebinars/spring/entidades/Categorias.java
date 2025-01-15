@@ -40,6 +40,15 @@ public class Categorias {
 		this.cartas = cartas;
 	}
 
+	public void addCarta(Carta carta) {
+		this.cartas.add(carta);
+		carta.getCategorias().add(this);
+	}
+	public void removeCarta(Carta carta) {
+		this.cartas.remove(carta);
+		carta.getCategorias().remove(this);
+	}
+
 	public Long getId() {
 		return id;
 	}

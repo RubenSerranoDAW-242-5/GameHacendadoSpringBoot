@@ -39,6 +39,7 @@ public class CompraControlador {
         model.addAttribute("pedido", pedido);
         model.addAttribute("listaLineaPedidos", bdlineaPedidos.findByPedidoId(idPedido));
         model.addAttribute("gastoEnvio", sesion.getAttribute("gastoEnvio"));
+        sesion.setAttribute("IdPedido", null);
 
         return "layout/compraCarrito";
     }

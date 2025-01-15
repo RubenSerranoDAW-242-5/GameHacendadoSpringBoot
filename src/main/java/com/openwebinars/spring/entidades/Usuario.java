@@ -1,10 +1,16 @@
 package com.openwebinars.spring.entidades;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -38,6 +44,14 @@ public class Usuario {
     @Column(nullable = false, length = 50)
     private String telefono;
 
+	@ManyToMany
+	@JoinTable(
+		name = "usuario_pedido",
+		joinColumns = @JoinColumn(name = "usuario_id"),
+		inverseJoinColumns = @JoinColumn(name = "pedido_id")
+	)
+	private Set<Pedidos> Pedidos = new HashSet<>();
+
 	public Usuario() {
 	}
 	
@@ -53,6 +67,15 @@ public class Usuario {
 		this.telefono = telefono;
 	}
 
+	public void addPedido(Pedidos pedido) {
+		this.Pedidos.add(pedido);
+		pedido.setUsuario(this);
+	}
+
+	public void removePedido(Pedidos pedido) {
+		this.Pedidos.remove(pedido);
+		pedido.setUsuario(null);
+	}
 
 	public String getNombre() {
 		return nombre;

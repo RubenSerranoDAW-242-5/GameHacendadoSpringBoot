@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.openwebinars.spring.entidades.Carta;
@@ -46,7 +47,8 @@ public class PedidosServicio {
     }
 
     public Pedidos findByEstado(EstadoPedido estado, Long usuarioId) {
-        return repositorio.findByEstado(estado, usuarioId);
+        List<Pedidos> pedidos = repositorio.findByEstado(estado, usuarioId, PageRequest.of(0, 1));
+        return pedidos.isEmpty() ? null : pedidos.get(0);
     }
 
     public Carta findCarta(Long c, Long u) {
