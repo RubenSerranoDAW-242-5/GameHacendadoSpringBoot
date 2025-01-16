@@ -33,7 +33,7 @@
 
 /* Estilos del formulario de búsqueda */
 .formBusqueda {
-    width: 40%;
+    width: 50%;
     /* Cambia el ancho si es necesario */
 }
 
@@ -45,10 +45,19 @@
 }
 
 .formBusqueda .search-bar input[type="text"] {
-    width: 80%;
+    width: 70%;
     padding: 8px;
-    border: 1px solid #00bfff;
-    border-radius: 5px 0 0 5px;
+    border: 2px solid #00bfff;
+    border-radius: 25px 0 0 25px;
+    font-size: 14px;
+}
+
+.formBusqueda .search-bar select.categoria-select {
+    width: 30%;
+    padding: 8px;
+    border: 2px solid #00bfff;
+    border-left: none;
+    border-radius: 0 25px 25px 0;
     font-size: 14px;
 }
 
@@ -56,9 +65,9 @@
     padding: 8px 15px;
     background-color: white;
     color: #007bff;
-    border: 1px solid #00bfff;
+    border: 2px solid #00bfff;
     border-left: none;
-    border-radius: 0 5px 5px 0;
+    border-radius: 0 25px 25px 0;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }

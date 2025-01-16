@@ -14,21 +14,25 @@
 			<h1>GameHacendado</h1>
 		</div>
 
-		<form id="buscadorForm" th:action="@{/buscarCartas}" method="get" class="formBusqueda">
-            <div class="search-bar">
-                <input id="searchInput" type="text" name="query" placeholder="Buscar productos...">
-                <button type="submit">Buscar</button>
-            </div>
-        </form>
+		<form id="buscadorForm" th:action="@{/buscar}" method="get" class="formBusqueda">
+			<div class="search-bar">
+				<input id="searchInput" type="text" name="query" placeholder="Buscar productos...">
+				<select name="categoria" class="categoria-select">
+					<option value="">Todas las categorías</option>
+					 <option th:each="categoria : ${categorias}" th:value="${categoria.nombre}" th:text="${categoria.nombre}"></option>
+				</select>
+			</div>
+			<script th:src="@{/js/buscador.js}"></script>
+		</form>
 
-		<div class="boton-login" th:if="${!usuarioLogueado}">
+		<div class="boton-login" th:if="${!usuarioLogueado }">
 			<button class="botonInicioSesion" onclick="window.location.href='/login'">Iniciar Sesión</button>
 			<button class="botonRegistro" onclick="window.location.href='registro'">Registrarse</button>
 		</div>
-		<div class="icons" th:if="${usuarioLogueado}">
-			<a href="/public/perfil.html" class="iconoUsuario"> <img src="/img/iconoUsuario.webp" alt="Icono Usuario">
-			</a> <a href="/public/carrito.html" class="iconoCarrito"> <img src="img/carrito.webp" alt="Icono Carrito">
-				<span th:id="contador-carrito" id="contador-carro" >0</span>
+		<div class="icons" th:if="${usuarioLogueado || usuarioLogueado==null}">
+			<a href="/perfil" class="iconoUsuario"> <img src="/img/iconoUsuario.webp" alt="Icono Usuario">
+			</a> <a href="/carrito" class="iconoCarrito"> <img src="img/carrito.webp" alt="Icono Carrito">
+				<span th:id="contador-carrito" th:text="${contador_carrito}" id="contador-carro">0</span>
 			</a>
 			<button class="cerrarSesion" th:if="${usuarioLogueado}"
 				onclick="window.location.href='../login?logout=true'">Cerrar Sesión</button>
@@ -38,6 +42,7 @@
 			<button class="añadir-carta" onclick="window.location.href='crearCarta.php'">Añadir
 				Nueva Carta</button>
 		</div>
+
 	</header>
 </body>
 

@@ -45,6 +45,8 @@ public class CarritoControlador {
 
         Long id = (Long) sesion.getAttribute("IdPedido");
 
+        model.addAttribute("usuarioLogueado", sesion.getAttribute("usuarioLogueado"));
+
         if (id != null) {
             Pedidos p = bdPedidos.findById(id);
             List<LineaPedidos> listaLineaPedidos = bdlineaPedidos.findByPedidoId(id);
@@ -113,9 +115,9 @@ public class CarritoControlador {
 
         Carta carta = bdCarta.findById(IdCarta);
         Usuario u = bdUsuario.findById((Long) sesion.getAttribute("id"));
-
+        Integer contadorCarrito = (Integer) sesion.getAttribute("contador_carrito");
         Pedidos p = bdPedidos.findByEstado(EstadoPedido.EN_PROCESO, u);
-        
+
         if (p == null) {
             p = new Pedidos(LocalDateTime.now(), 0, u.getDireccion(), EstadoPedido.EN_PROCESO, u);
             u.addPedido(p);
@@ -142,12 +144,13 @@ public class CarritoControlador {
             sesion.setAttribute("IdPedido", p.getId());
         }
 
-        if (bdPedidos.findCarta(IdCarta, u.getId()) != null) {
-            Integer contadorCarrito = (Integer) sesion.getAttribute("contador_carrito");
-
-            sesion.setAttribute("contador_carrito", contadorCarrito + 1);
-            model.addAttribute("contador_carrito", contadorCarrito + 1);
+        // Update the contador_carrito
+        if (contadorCarrito == null) {
+            contadorCarrito = 0;
         }
+        sesion.setAttribute("contador_carrito", contadorCarrito + 1);
+        model.addAttribute("contador_carrito", contadorCarrito + 1);
+
         return "redirect:/";
     }
 }

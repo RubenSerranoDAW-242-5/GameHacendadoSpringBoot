@@ -63,9 +63,10 @@ public class CartaServicio {
 		return repositorio.findByPrecioCarta(precioCarta);
 	}
 
-	public List<Carta> findByNombreParcial(String query) {
-		return repositorio.findByNombreCartaContainingIgnoreCase(query);
+	public List<Carta> findByAll(String query) {
+		return repositorio.findByAll(query);
 	}
-	
-
+	public List<Carta> findByAllAndCategoria(String query, String categoria) {
+		return repositorio.findByAllAndCategoria(query, categoria);
+	}
 }
