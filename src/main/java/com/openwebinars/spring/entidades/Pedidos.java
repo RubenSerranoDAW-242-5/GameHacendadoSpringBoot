@@ -16,90 +16,87 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "Pedidos")
 public class Pedidos {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column
-	private LocalDateTime fecha;
+    @Column
+    private LocalDateTime fecha;
 
-	@Column(precision = 10, scale = 2)
-	private Integer precioTotal;
+    @Column(precision = 10, scale = 2)
+    private Integer precioTotal;
 
-	@Column(length = 800)
-	private String direccionEnvio;
+    @Column(length = 800)
+    private String direccionEnvio;
 
-	@Enumerated(EnumType.STRING)
-	@Column(columnDefinition = "ENUM('EN_PROCESO','TERMINADO')", nullable = false)
-	private EstadoPedido estado;
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "ENUM('EN_PROCESO','TERMINADO')", nullable = false)
+    private EstadoPedido estado;
 
-	@ManyToOne
-	@JoinColumn(name = "idUsuario", nullable = false)
-	private Usuario usuario;
+    @ManyToOne
+    @JoinColumn(name = "idUsuario", nullable = false)
+    private Usuario usuario;
 
-	public Pedidos() {
-	}
+    public Pedidos() {
+    }
 
-	// Constructor
-	public Pedidos(LocalDateTime fecha, Integer precioTotal, String direccionEnvio, EstadoPedido estado, Usuario usuario) {
-		this.fecha = fecha;
-		this.precioTotal = precioTotal;
-		this.direccionEnvio = direccionEnvio;
-		this.estado = estado;
-		this.usuario = usuario;
-	}
+    public Pedidos(LocalDateTime fecha, Integer precioTotal, String direccionEnvio, EstadoPedido estado, Usuario usuario) {
+        this.fecha = fecha;
+        this.precioTotal = precioTotal;
+        this.direccionEnvio = direccionEnvio;
+        this.estado = estado;
+        this.usuario = usuario;
+    }
 
-	public enum EstadoPedido {
-		EN_PROCESO, TERMINADO 
-	}
+    public enum EstadoPedido {
+        EN_PROCESO, TERMINADO 
+    }
 
-	public LocalDateTime getFecha() {
-		return fecha;
-	}
+    public LocalDateTime getFecha() {
+        return fecha;
+    }
 
-	public void setFecha(LocalDateTime fecha) {
-		this.fecha = fecha;
-	}
+    public void setFecha(LocalDateTime fecha) {
+        this.fecha = fecha;
+    }
 
-	public Integer getPrecioTotal() {
-		return precioTotal;
-	}
+    public Integer getPrecioTotal() {
+        return precioTotal;
+    }
 
-	public void setPrecioTotal(Integer precioTotal) {
-		this.precioTotal = precioTotal;
-	}
+    public void setPrecioTotal(Integer precioTotal) {
+        this.precioTotal = precioTotal;
+    }
 
-	public String getDireccionEnvio() {
-		return direccionEnvio;
-	}
+    public String getDireccionEnvio() {
+        return direccionEnvio;
+    }
 
-	public void setDireccionEnvio(String direccionEnvio) {
-		this.direccionEnvio = direccionEnvio;
-	}
+    public void setDireccionEnvio(String direccionEnvio) {
+        this.direccionEnvio = direccionEnvio;
+    }
 
-	public EstadoPedido getEstado() {
-		return estado;
-	}
+    public EstadoPedido getEstado() {
+        return estado;
+    }
 
-	public void setEstado(EstadoPedido estado) {
-		this.estado = estado;
-	}
+    public void setEstado(EstadoPedido estado) {
+        this.estado = estado;
+    }
 
-	public Usuario getUsuario() {
-		return usuario;
-	}
+    public Usuario getUsuario() {
+        return usuario;
+    }
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
-	
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

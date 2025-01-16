@@ -46,8 +46,9 @@ public class PedidosServicio {
         return repositorio.findByUsuarioId(id);
     }
 
-    public Pedidos findByEstado(EstadoPedido estado, Long usuarioId) {
-        List<Pedidos> pedidos = repositorio.findByEstado(estado, usuarioId, PageRequest.of(0, 1));
+    public Pedidos findByEstado(EstadoPedido estado, Usuario u) {
+        List<Pedidos> pedidos = repositorio.findByEstado(estado, u.getId(), PageRequest.of(0, 1));
+        
         return pedidos.isEmpty() ? null : pedidos.get(0);
     }
 

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.openwebinars.spring.entidades.Carta;
 import com.openwebinars.spring.entidades.Pedidos;
@@ -50,9 +51,9 @@ public class WebControlador {
         if (log) {
             Usuario u = bdUsuario.findById((Long) sesion.getAttribute("id"));
 
-            if (bdPedidos.findByEstado(EstadoPedido.EN_PROCESO,u.getId()) != null) {
+            if (bdPedidos.findByEstado(EstadoPedido.EN_PROCESO, u) != null) {
 
-                Pedidos p = bdPedidos.findByEstado(EstadoPedido.EN_PROCESO, u.getId());
+                Pedidos p = bdPedidos.findByEstado(EstadoPedido.EN_PROCESO, u);
                 if (p != null) {
                     Integer contadorPedidos = bdPedidos.countPedidos(u, p);
 
@@ -69,6 +70,14 @@ public class WebControlador {
             }
         }
         return "public/index";
+    }
+
+    @GetMapping("/buscar")
+    public String buscarCartas(@RequestParam("query") String query, Model model) {
+        List<Carta> resultados = bdCarta.findByNombreParcial(query);
+        model.addAttribute("resultados", resultados);
+        model.addAttribute("query", query);
+        return "public/resultados";
     }
 
 }

@@ -1,6 +1,7 @@
 package com.openwebinars.spring.repositorio;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -19,4 +20,6 @@ public interface CartaRepositorio extends JpaRepository<Carta, Long> {
     public Carta findByCosteCarta(String costeCarta);
 
     public Carta findByPrecioCarta(BigDecimal precioCarta);
+
+    List<Carta> findByNombreCartaContainingIgnoreCase(String nombreCarta);
 }

@@ -8,15 +8,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "Usuario")
 public class Usuario {
-	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -44,111 +42,115 @@ public class Usuario {
     @Column(nullable = false, length = 50)
     private String telefono;
 
-	@ManyToMany
-	@JoinTable(
-		name = "usuario_pedido",
-		joinColumns = @JoinColumn(name = "usuario_id"),
-		inverseJoinColumns = @JoinColumn(name = "pedido_id")
-	)
-	private Set<Pedidos> Pedidos = new HashSet<>();
+    @OneToMany(mappedBy = "usuario")
+    private Set<Pedidos> pedidos = new HashSet<>();
 
-	public Usuario() {
-	}
-	
-	public Usuario(String nombre, String apellido, String email, String dni, String contraseña, String rol,
-			String direccion, String telefono) {
-		this.nombre = nombre;
-		this.apellido = apellido;
-		this.email = email;
-		this.dni = dni;
-		this.contraseña = contraseña;
-		this.rol = rol;
-		this.direccion = direccion;
-		this.telefono = telefono;
-	}
+    public Usuario() {
+    }
 
-	public void addPedido(Pedidos pedido) {
-		this.Pedidos.add(pedido);
-		pedido.setUsuario(this);
-	}
+    public Usuario(String nombre, String apellido, String email, String dni, String contraseña, String rol,
+            String direccion, String telefono) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.email = email;
+        this.dni = dni;
+        this.contraseña = contraseña;
+        this.rol = rol;
+        this.direccion = direccion;
+        this.telefono = telefono;
+    }
 
-	public void removePedido(Pedidos pedido) {
-		this.Pedidos.remove(pedido);
-		pedido.setUsuario(null);
-	}
+    public void addPedido(Pedidos pedido) {
+        this.pedidos.add(pedido);
+        pedido.setUsuario(this);
+    }
 
-	public String getNombre() {
-		return nombre;
-	}
+    public void removePedido(Pedidos pedido) {
+        this.pedidos.remove(pedido);
+        pedido.setUsuario(null);
+    }
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
+    public Set<Pedidos> getPedidos() {
+        return pedidos;
+    }
 
-	public String getApellido() {
-		return apellido;
-	}
+    public void setPedidos(Set<Pedidos> pedidos) {
+        this.pedidos = pedidos;
+    }
 
-	public void setApellido(String apellido) {
-		this.apellido = apellido;
-	}
+    public Pedidos getPedidoById(Long id) {
+        return pedidos.stream().filter(p -> p.getId().equals(id)).findFirst().orElse(null);
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getDni() {
-		return dni;
-	}
+    public String getNombre() {
+        return nombre;
+    }
 
-	public void setDni(String dni) {
-		this.dni = dni;
-	}
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
-	public String getContraseña() {
-		return contraseña;
-	}
+    public String getApellido() {
+        return apellido;
+    }
 
-	public void setContraseña(String contraseña) {
-		this.contraseña = contraseña;
-	}
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
 
-	public String getRol() {
-		return rol;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void setRol(String rol) {
-		this.rol = rol;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public String getDireccion() {
-		return direccion;
-	}
+    public String getDni() {
+        return dni;
+    }
 
-	public void setDireccion(String direccion) {
-		this.direccion = direccion;
-	}
+    public void setDni(String dni) {
+        this.dni = dni;
+    }
 
-	public String getTelefono() {
-		return telefono;
-	}
+    public String getContraseña() {
+        return contraseña;
+    }
 
-	public void setTelefono(String telefono) {
-		this.telefono = telefono;
-	}
+    public void setContraseña(String contraseña) {
+        this.contraseña = contraseña;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public String getRol() {
+        return rol;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-    
-    
+    public void setRol(String rol) {
+        this.rol = rol;
+    }
 
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
 }

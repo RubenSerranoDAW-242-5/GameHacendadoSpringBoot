@@ -15,47 +15,51 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class Seguridad {
 
-	@Autowired
-	UserDetailsService userDetailsService;
+    @Autowired
+    private UserDetailsService userDetailsService;
 
-	@Bean
-	protected BCryptPasswordEncoder getPassWordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-	@Bean
-	protected DaoAuthenticationProvider authProvider() {
-		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-		authProvider.setUserDetailsService(userDetailsService);
-		authProvider.setPasswordEncoder(getPassWordEncoder());
-		return authProvider;
-	}
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
 
-	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http
-				.authorizeHttpRequests(auth -> auth
-						.requestMatchers(AntPathRequestMatcher.antMatcher("/webjars/**")).permitAll()
-						.requestMatchers(AntPathRequestMatcher.antMatcher("/css/**")).permitAll()
-						.requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
-						.requestMatchers(AntPathRequestMatcher.antMatcher("/registro/**")).permitAll()
-						.requestMatchers(AntPathRequestMatcher.antMatcher("/registro/**")).permitAll()
-						.requestMatchers(AntPathRequestMatcher.antMatcher("/**")).permitAll()
-						.anyRequest().authenticated())
-				.formLogin(login -> login
-						.loginPage("/login")
-						.permitAll()
-						.defaultSuccessUrl("/",true)
-						.failureUrl("/login?error=true"))
-				.logout(logout -> logout
-						.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-						.logoutSuccessUrl("/login?logout=true")
-						.permitAll());
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .authorizeRequests(authorizeRequests ->
+                authorizeRequests
+                    .requestMatchers(AntPathRequestMatcher.antMatcher("/webjars/**")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher.antMatcher("/css/**")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher.antMatcher("/registro/**")).permitAll()
+                    .requestMatchers(AntPathRequestMatcher.antMatcher("/**")).permitAll()
+                    .anyRequest().authenticated()
+            )
+            .formLogin(formLogin ->
+                formLogin
+                    .loginPage("/login")
+                    .permitAll()
+                    .defaultSuccessUrl("/", true)
+                    .failureUrl("/login?error=true")
+            )
+            .logout(logout ->
+                logout
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                    .logoutSuccessUrl("/login?logout=true")
+                    .permitAll()
+            );
 
-		http.csrf(csrf -> csrf.disable());
-		http.headers(headers -> headers.frameOptions(frame -> frame.disable()));
+        http.csrf(csrf -> csrf.disable());
+        http.headers(headers -> headers.frameOptions(frame -> frame.disable()));
 
-		return http.build();
-	}
-
+        return http.build();
+    }
 }

@@ -1,48 +1,49 @@
-document.addEventListener('DOMContentLoaded', function () { 
+document.addEventListener('DOMContentLoaded', function () {
     console.log("DOM cargado");
-    // Seleccionamos todos los botones de más y menos
-    const botonesMas = document.querySelectorAll('.btn-mas');
-    const botonesMenos = document.querySelectorAll('.btn-menos');
 
-    // Aseguramos que los botones existen antes de agregarles el evento
-    if (botonesMas.length > 0 && botonesMenos.length > 0) {
-        botonesMas.forEach(boton => {
-            boton.addEventListener('click', function () {
-                const idCarta = this.getAttribute('data-id');
-                const inputCantidad = document.getElementById(`cantidad-${idCarta}`);
-                if (inputCantidad) {
-                    let cantidadActual = parseInt(inputCantidad.value);
-                    const cantidadMax = inputCantidad.max;
+    // Buscador de cartas
+    const searchInput = document.querySelector('#searchInput');
+    const gridContainer = document.getElementById('grid');
 
-                    // Incrementar la cantidad pero no sobrepasar el máximo
-                    if (cantidadActual < cantidadMax) {
-                        cantidadActual++;
-                        inputCantidad.value = cantidadActual;
-                        console.log(inputCantidad.value);
-                        // console.log(cantidadActual+"+1 idCarta "+idCarta);
-                    }
-                }
-            });
+    if (searchInput) {
+        searchInput.addEventListener('input', function () {
+            const query = this.value.trim();
+            if (query.length > 0) {
+                fetch(`/buscarCartas?query=${query}`)
+                    .then(response => response.text())
+                    .then(html => {
+                        gridContainer.innerHTML = html;
+                    })
+                    .catch(error => console.error('Error fetching search results:', error));
+            } else {
+                // Si no hay búsqueda, recargar todas las cartas
+                fetch(`/buscarCartas?query=`)
+                    .then(response => response.text())
+                    .then(html => {
+                        gridContainer.innerHTML = html;
+                    })
+                    .catch(error => console.error('Error fetching default results:', error));
+            }
         });
-
-        botonesMenos.forEach(boton => {
-            boton.addEventListener('click', function () {
-                const idCarta = this.getAttribute('data-id');
-                const inputCantidad = document.getElementById(`cantidad-${idCarta}`);
-                if (inputCantidad) {
-                    let cantidadActual = parseInt(inputCantidad.value);
-
-                    // Decrementar la cantidad pero no bajar de 1
-                    if (cantidadActual > 1) {
-                        cantidadActual--;
-                        inputCantidad.value = cantidadActual;
-                        console.log(inputCantidad.value);
-                        // console.log(cantidadActual+"-1 idCarta "+idCarta);
-                    }
-                }
-            });
-        });
-    } else {
-        console.error("Los botones de incremento y decremento no se han encontrado.");
     }
+
+    // Incrementar/Decrementar cantidades
+    document.addEventListener('click', function (e) {
+        if (e.target.matches('.btn-mas') || e.target.matches('.btn-menos')) {
+            const idCarta = e.target.getAttribute('data-id');
+            const inputCantidad = document.getElementById(`cantidad-${idCarta}`);
+            if (inputCantidad) {
+                let cantidadActual = parseInt(inputCantidad.value);
+                const cantidadMax = inputCantidad.max;
+
+                if (e.target.matches('.btn-mas') && cantidadActual < cantidadMax) {
+                    inputCantidad.value = ++cantidadActual;
+                }
+
+                if (e.target.matches('.btn-menos') && cantidadActual > 1) {
+                    inputCantidad.value = --cantidadActual;
+                }
+            }
+        }
+    });
 });

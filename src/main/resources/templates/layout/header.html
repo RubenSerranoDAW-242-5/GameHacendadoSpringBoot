@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es">
 
 <head>
 	<meta charset="UTF-8">
@@ -8,43 +8,35 @@
 
 <body>
 	<header id="cabezera" th:fragment="header">
-
 		<div class="logo">
 			<a href="/"> <img src="/img/logo.webp" alt="Logo GameHacendado">
 			</a>
 			<h1>GameHacendado</h1>
 		</div>
-		<div th:if="${currentUri == '/'}" class="formBusqueda">
-			<form action="buscar.php" method="post">
-				<div class="search-bar">
-					<input type="hidden" name="metodoPost" value="busqueda"> <input type="text" name="textoBusqueda"
-						placeholder="Buscar productos...">
-					<button type="submit">Buscar</button>
-				</div>
-				<div id="resultadosBusqueda"></div>
-			</form>
+
+		<form id="buscadorForm" th:action="@{/buscarCartas}" method="get" class="formBusqueda">
+            <div class="search-bar">
+                <input id="searchInput" type="text" name="query" placeholder="Buscar productos...">
+                <button type="submit">Buscar</button>
+            </div>
+        </form>
+
+		<div class="boton-login" th:if="${!usuarioLogueado}">
+			<button class="botonInicioSesion" onclick="window.location.href='/login'">Iniciar Sesión</button>
+			<button class="botonRegistro" onclick="window.location.href='registro'">Registrarse</button>
+		</div>
+		<div class="icons" th:if="${usuarioLogueado}">
+			<a href="/public/perfil.html" class="iconoUsuario"> <img src="/img/iconoUsuario.webp" alt="Icono Usuario">
+			</a> <a href="/public/carrito.html" class="iconoCarrito"> <img src="img/carrito.webp" alt="Icono Carrito">
+				<span th:id="contador-carrito" id="contador-carro" >0</span>
+			</a>
+			<button class="cerrarSesion" th:if="${usuarioLogueado}"
+				onclick="window.location.href='../login?logout=true'">Cerrar Sesión</button>
 		</div>
 
-		<div th:if="${currentUri == '/'}">
-			<div class="boton-login" th:if="${!usuarioLogueado}">
-				<button class="botonInicioSesion" onclick="window.location.href='/login'">Iniciar Sesión</button>
-				<button class="botonRegistro" onclick="window.location.href='registro'">Registrarse</button>
-			</div>
-			<div class="icons" th:if="${usuarioLogueado}">
-				<a onclick="window.location.href='/perfil'" class="iconoUsuario"> <img src="/img/iconoUsuario.webp"
-						alt="Icono Usuario">
-				</a> <a onclick="window.location.href='/carrito'" class="iconoCarrito"> <img src="img/carrito.webp"
-						alt="Icono Carrito">
-					<span th:text="${contador_carrito}" id="contador-carrito">0</span>
-				</a>
-				<button class="cerrarSesion" th:if="${usuarioLogueado}"
-					onclick="window.location.href='../login?logout=true'">Cerrar Sesión</button>
-			</div>
-
-			<div class="boton-añadir" th:if="${usuarioAdmin}">
-				<button class="añadir-carta" onclick="window.location.href='crearCarta.php'">Añadir
-					Nueva Carta</button>
-			</div>
+		<div class="boton-añadir" th:if="${usuarioAdmin}">
+			<button class="añadir-carta" onclick="window.location.href='crearCarta.php'">Añadir
+				Nueva Carta</button>
 		</div>
 	</header>
 </body>

@@ -1,0 +1,10 @@
+<div th:fragment="resultados">
+    <div th:if="${#lists.size(cartas) > 0}">
+        <div th:each="carta : ${cartas}" th:data-id="${carta.id}">
+            <div th:text="${carta.nombreCarta}"></div>
+        </div>
+    </div>
+    <div th:if="${#lists.size(cartas) == 0}">
+        <div>No se encontraron resultados.</div>
+    </div>
+</div>

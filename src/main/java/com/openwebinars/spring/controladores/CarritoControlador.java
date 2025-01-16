@@ -114,9 +114,11 @@ public class CarritoControlador {
         Carta carta = bdCarta.findById(IdCarta);
         Usuario u = bdUsuario.findById((Long) sesion.getAttribute("id"));
 
-        Pedidos p = bdPedidos.findByEstado(EstadoPedido.EN_PROCESO, u.getId());
+        Pedidos p = bdPedidos.findByEstado(EstadoPedido.EN_PROCESO, u);
+        
         if (p == null) {
             p = new Pedidos(LocalDateTime.now(), 0, u.getDireccion(), EstadoPedido.EN_PROCESO, u);
+            u.addPedido(p);
             bdPedidos.add(p);
         }
 
