@@ -19,7 +19,7 @@
 				<input id="searchInput" type="text" name="query" placeholder="Buscar productos...">
 				<select name="categoria" class="categoria-select">
 					<option value="">Todas las categorías</option>
-					 <option th:each="categoria : ${categorias}" th:value="${categoria.nombre}" th:text="${categoria.nombre}"></option>
+					 <option th:each="categoria : ${categorias}" th:value="${categoria.id}" th:text="${categoria.categoria}"></option>
 				</select>
 			</div>
 			<script th:src="@{/js/buscador.js}"></script>

@@ -42,7 +42,7 @@ public class Carta {
 	@Column(nullable = false)
 	private Integer cantidad;
 
-	@ManyToMany(mappedBy = "categorias")
+	@ManyToMany(mappedBy = "cartas")
 	private Set<Categorias> categorias = new HashSet<>();
 
 	public Carta() {

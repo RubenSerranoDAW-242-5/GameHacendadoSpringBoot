@@ -66,7 +66,10 @@ public class CartaServicio {
 	public List<Carta> findByAll(String query) {
 		return repositorio.findByAll(query);
 	}
-	public List<Carta> findByAllAndCategoria(String query, String categoria) {
-		return repositorio.findByAllAndCategoria(query, categoria);
+	public List<Carta> findByAllAndCategoria(String query, Long categoriaId) {
+		return repositorio.findByAllAndCategoria(query, categoriaId);
+	}
+	public List<Carta> findByCategoria(Long categoriaId) {
+		return repositorio.findByCategoria(categoriaId);
 	}
 }

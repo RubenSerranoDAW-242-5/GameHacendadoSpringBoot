@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.openwebinars.spring.entidades.Carta;
 
@@ -24,7 +25,17 @@ public interface CartaRepositorio extends JpaRepository<Carta, Long> {
 
     @Query("SELECT c FROM Carta c WHERE LOWER(c.nombreCarta) LIKE LOWER(CONCAT('%', ?1, '%')) OR LOWER(c.tipoCarta) LIKE LOWER(CONCAT('%', ?1, '%')) OR LOWER(c.color) LIKE LOWER(CONCAT('%', ?1, '%')) OR LOWER(c.codigoCarta) LIKE LOWER(CONCAT('%', ?1, '%')) OR LOWER(c.costeCarta) LIKE LOWER(CONCAT('%', ?1, '%'))")
     List<Carta> findByAll(String query);
+    
+    @Query("SELECT c FROM Carta c JOIN c.categorias cat WHERE cat.id = ?1")
+    List<Carta> findByCategoria(Long categoriaId);
 
-    @Query("SELECT c FROM Carta c WHERE (LOWER(c.nombreCarta) LIKE LOWER(CONCAT('%', ?1, '%')) OR LOWER(c.tipoCarta) LIKE LOWER(CONCAT('%', ?1, '%')) OR LOWER(c.color) LIKE LOWER(CONCAT('%', ?1, '%')) OR LOWER(c.codigoCarta) LIKE LOWER(CONCAT('%', ?1, '%')) OR LOWER(c.costeCarta) LIKE LOWER(CONCAT('%', ?1, '%'))) AND LOWER(c.categoria) = LOWER(?2)")
-    List<Carta> findByAllAndCategoria(String query, String categoria);
+    @Query("SELECT c FROM Carta c JOIN c.categorias cat WHERE " +
+            "(LOWER(c.nombreCarta) LIKE LOWER(CONCAT('%', ?1, '%')) " +
+            "OR LOWER(c.tipoCarta) LIKE LOWER(CONCAT('%', ?1, '%')) " +
+            "OR LOWER(c.color) LIKE LOWER(CONCAT('%', ?1, '%')) " +
+            "OR LOWER(c.codigoCarta) LIKE LOWER(CONCAT('%', ?1, '%')) " +
+            "OR LOWER(c.costeCarta) LIKE LOWER(CONCAT('%', ?1, '%'))) " +
+            "AND cat.id = ?2")
+    List<Carta> findByAllAndCategoria(@Param("query") String query, @Param("categoriaId") Long categoriaId);
+
 }

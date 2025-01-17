@@ -3,36 +3,34 @@ document.addEventListener('DOMContentLoaded', function () {
     const categorySelect = document.querySelector('select[name="categoria"]');
     const gridContainer = document.getElementById('grid');
 
-    if (searchInput && categorySelect) {
-        searchInput.addEventListener('input', function () {
-            const query = this.value.trim();
-            const categoria = categorySelect.value;
-            fetch(`/buscar?query=${query}&categoria=${categoria}`)
-                .then(response => response.text())
-                .then(html => {
-                    gridContainer.innerHTML = html;
-                    const cartas = gridContainer.querySelectorAll('.carta');
-                    cartas.forEach((carta, index) => {
-                        carta.style.animationDelay = `${index * 0.1}s`;
-                    });
-                })
-                .catch(error => console.error('Error fetching search results:', error));
-        });
-
-        categorySelect.addEventListener('change', function () {
+    if (searchInput && categorySelect && gridContainer) {
+        function fetchResults() {
             const query = searchInput.value.trim();
-            const categoria = this.value;
-            fetch(`/buscar?query=${query}&categoria=${categoria}`)
-                .then(response => response.text())
+            const categoria = categorySelect.value;
+
+            console.log(`Buscando con query="${query}" y categoria=${categoria}`);
+
+            fetch(`/buscar?query=${encodeURIComponent(query)}&categoria=${encodeURIComponent(categoria)}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Error ${response.status}: ${response.statusText}`);
+                    }
+                    return response.text();
+                })
                 .then(html => {
                     gridContainer.innerHTML = html;
+
                     const cartas = gridContainer.querySelectorAll('.carta');
                     cartas.forEach((carta, index) => {
                         carta.style.animationDelay = `${index * 0.1}s`;
                     });
                 })
-                .catch(error => console.error('Error fetching search results:', error));
-        });
+                .catch(error => console.error('Error al buscar resultados:', error));
+        }
+
+        searchInput.addEventListener('input', fetchResults);
+        categorySelect.addEventListener('change', fetchResults);
+    } else {
+        console.error('Elementos del DOM no encontrados.');
     }
 });
-
