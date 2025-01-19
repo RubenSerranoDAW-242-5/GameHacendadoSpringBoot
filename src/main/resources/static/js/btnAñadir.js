@@ -11,16 +11,12 @@ document.addEventListener('DOMContentLoaded', function () {
             botonesMas.forEach(boton => {
                 boton.addEventListener('click', function () {
                     const idCarta = this.getAttribute('data-id');
-                    const inputCantidad = document.getElementById(`cantidad-${idCarta}`);
+                    const inputCantidad = document.getElementById(`cantidad-${idCarta}-añadir`);
                     if (inputCantidad) {
                         let cantidadActual = parseInt(inputCantidad.value);
-                        const cantidadMax = inputCantidad.max;
-
-                        if (cantidadActual < cantidadMax) {
-                            cantidadActual++;
-                            inputCantidad.value = cantidadActual;
-                            console.log(`Cantidad aumentada: ${cantidadActual}`);
-                        }
+                        cantidadActual++;
+                        inputCantidad.value = cantidadActual;
+                        console.log(`Cantidad aumentada: ${cantidadActual}`);
                     }
                 });
             });
@@ -28,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
             botonesMenos.forEach(boton => {
                 boton.addEventListener('click', function () {
                     const idCarta = this.getAttribute('data-id');
-                    const inputCantidad = document.getElementById(`cantidad-${idCarta}`);
+                    const inputCantidad = document.getElementById(`cantidad-${idCarta}-añadir`);
                     if (inputCantidad) {
                         let cantidadActual = parseInt(inputCantidad.value);
 

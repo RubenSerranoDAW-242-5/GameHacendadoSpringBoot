@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" th:href="@{/css/zonaCartas.css}">
+    <link rel="stylesheet" th:href="@{/css/crearCarta.css}">
 
     <head th:replace="layout/head::head"></head>
 </head>
@@ -47,7 +47,7 @@
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- Modal para editar carta -->
     <div id="editModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
@@ -62,7 +62,7 @@
                 <input type="text" name="tipo" id="editTipo" required>
 
                 <label for="coste">Coste:</label>
-                <input type="text" name="coste" id="editCoste" required>
+                <input type="text" name="coste" id="editCoste">
 
                 <label for="color">Color:</label>
                 <input type="text" name="color" id="editColor" required>
@@ -82,10 +82,56 @@
         </div>
     </div>
 
-    <a href="/zonaCartas/nuevaCarta" class="btn-nueva-carta">Añadir nueva carta</a>
+    <!-- Modal para añadir nueva carta -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAddModal()">&times;</span>
+            <h2>Añadir Nueva Carta</h2>
+            <form th:action="@{/zonaCartas/add}" method="post" enctype="multipart/form-data">
+                <label for="addNombre">Nombre:</label>
+                <input type="text" id="addNombre" name="nombre" required>
+                
+                <label for="addTipo">Tipo:</label>
+                <input type="text" id="addTipo" name="tipo" required>
+                
+                <label for="addCoste">Coste:</label>
+                <input type="text" id="addCoste" name="coste">
+                
+                <label for="addColor">Color:</label>
+                <input type="text" id="addColor" name="color" required>
+                
+                <label for="addCodigo">Código:</label>
+                <input type="text" id="addCodigo" name="codigo" required>
+                
+                <label for="addPrecio">Precio:</label>
+                <input type="number" id="addPrecio" name="precio" required>
+                
+                <label for="addCantidad">Cantidad:</label>
+                <input type="number" id="addCantidad" name="cantidad" required>
+                
+                <label for="addImagen">Imagen:</label>
+                <input type="file" id="addImagen" name="imagen" accept="image/*" required onchange="previewImage(event)">
+                <img id="imagePreview" src="#" alt="Vista previa de la imagen" style="display:none; max-width: 100%; margin-top: 10px;">
+                
+                <label for="addCategorias">Categorías:</label>
+                <select id="option-selector" class="custom-select">
+                    <option th:each="categoria : ${categorias}" th:value="${categoria.id}" th:text="${categoria.categoria}"></option>
+                </select>
+                <button type="button" id="add-option" class="btn-add-option">Añadir</button>
+                
+                <ul id="selectedCategoriesList"></ul> <!-- List to display selected categories -->
+                
+                <!-- Hidden input to store selected categories -->
+                <input type="hidden" name="categorias" id="selectedCategoriesInput">
+                
+                <button type="submit" class="btn-guardar">Guardar</button>
+            </form>
+        </div>
+    </div>
 
-    <script th:src="@{/js/btnCantidad.js}"></script>
-    <script th:src="@{/js/modal.js}"></script>
+    <script th:src="@{/js/btnAñadir.js}"></script>
+    <script th:src="@{/js/modalEditarCarta.js}"></script>
+    <script th:src="@{/js/modalCrearCarta.js}"></script>
     <div th:replace="layout/footer :: footer"></div>
 </body>
 

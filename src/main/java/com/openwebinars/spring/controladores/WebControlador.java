@@ -84,8 +84,9 @@ public class WebControlador {
 
     @GetMapping("/buscar")
     public String buscarCartas(@RequestParam(required = false) String query,
-            @RequestParam(required = false) Long categoria,
-            Model model) {
+                               @RequestParam(required = false) Long categoria,
+                               @RequestParam(required = false) boolean admin,
+                               Model model, HttpServletRequest request) {
 
         List<Carta> resultados;
 
@@ -111,10 +112,11 @@ public class WebControlador {
         }
 
         model.addAttribute("cartas", resultados);
+        model.addAttribute("currentUri", request.getRequestURI());
         model.addAttribute("usuarioLogueado",
                 sesion.getAttribute("usuarioLogueado") != null ? sesion.getAttribute("usuarioLogueado") : false);
 
-        return "layout/resultado";
+        return admin ? "layout/resultadoAdmin" : "layout/resultado";
     }
 
 }

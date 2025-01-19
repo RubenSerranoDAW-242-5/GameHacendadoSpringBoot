@@ -1,38 +1,45 @@
-<div th:if="${mensaje}" th:text="${mensaje}" class="mensajeBusqueda" style="text-align: center; grid-column: 2; "></div>
+<div th:if="${mensaje}" th:text="${mensaje}" class="mensajeBusqueda" style="text-align: center; grid-column: 2;"></div>
 
-<div th:each="carta : ${listadoCartas}" class="carta">
-	<img th:src="@{/img/{img}(img=${carta.img})}" th:alt="${carta.nombreCarta}" class="carta-img">
-	<h3 th:text="${carta.nombreCarta}"></h3>
-	<p>Tipo: <span th:text="${carta.tipoCarta}"></span></p>
-	<p>Coste: <span th:text="${carta.costeCarta}"></span></p>
-	<p>Color: <span th:text="${carta.color}"></span></p>
-	<p>Código: <span th:text="${carta.codigoCarta}"></span></p>
-	<p id="precioCarta">Precio: <span th:text="${#numbers.formatDecimal(carta.precioCarta, 1, 2)}"></span>€</p>
-	<p id="cantidad-carta">Cantidad: <span th:text="${carta.cantidad}"></span></p>
+<div th:each="carta : ${cartas}" class="carta" th:classappend="${carta.cantidad == 0} ? 'out-of-stock' : ''"
+    th:data-id="${carta.id}" style="opacity: 0; animation: fadeIn 0.5s forwards;">
+    <img th:src="@{/img/{img}(img=${carta.img})}" th:alt="${carta.nombreCarta}" class="carta-img">
+    <h3 th:text="${carta.nombreCarta}"></h3>
+    <p>
+        Tipo: <span th:text="${carta.tipoCarta}"></span>
+    </p>
+    <p>
+        Coste: <span th:text="${carta.costeCarta}"></span>
+    </p>
+    <p>
+        Color: <span th:text="${carta.color}"></span>
+    </p>
+    <p>
+        Código: <span th:text="${carta.codigoCarta}"></span>
+    </p>
+    <p id="precioCarta">
+        Precio: <span th:text="${#numbers.formatDecimal(carta.precioCarta, 2,2)}"></span>€
+    </p>
 
-	<a href="#" class="boton-editar" th:data-id="${carta.id}" onclick="openModal(this); return false;">Editar Carta</a>
+    <!-- Mostrar el botón de editar y el formulario de añadir existencias si estamos en /zonaCartas -->
 
-	<form th:action="@{/zonaCartas/addExistencias}" method="post" class="form-añadir">
-		<div class="cantidad-controles-añadir">
+    <a href="#" class="boton-editar" th:data-id="${carta.id}" onclick="openModal(this); return false;">Editar Carta</a>
+    <form th:action="@{/zonaCartas/addExistencias}" method="post" class="form-añadir">
+        <div class="cantidad-controles-añadir">
+            <button type="button" class="btn-menos" th:data-id="${carta.id}">-</button>
+            <input type="number" th:id="'cantidad-' + ${carta.id} + '-añadir'" min="1" th:name="cantidad" value="1"
+                readonly>
+            <button type="button" class="btn-mas" th:data-id="${carta.id}">+</button>
+        </div>
+        <input type="hidden" name="idCarta" th:value="${carta.id}">
+        <button type="submit" class="btn-añadir">Añadir existencias</button>
+    </form>
 
-			<button type="button" class="btn-menos" th:data-id="${carta.id}">-</button>
-
-			<input type="number" th:id="'cantidad-' + ${carta.id} + '-añadir'" min="1" th:name="cantidad" value="1"
-				readonly>
-
-			<button type="button" class="btn-mas" th:data-id="${carta.id}">+</button>
-
-		</div>
-		<input type="hidden" name="idCarta" th:value="${carta.id}">
-		<button type="submit" class="btn-añadir">Añadir existencias</button>
-	</form>
-	<br>
 </div>
 
 <style>
-	@keyframes fadeIn {
-		to {
-			opacity: 1;
-		}
-	}
+    @keyframes fadeIn {
+        to {
+            opacity: 1;
+        }
+    }
 </style>

@@ -2,15 +2,17 @@ document.addEventListener('DOMContentLoaded', function () {
     const searchInput = document.querySelector('#searchInput');
     const categorySelect = document.querySelector('select[name="categoria"]');
     const gridContainer = document.getElementById('grid');
+    const currentUri = window.location.pathname;
 
     if (searchInput && categorySelect && gridContainer) {
         function fetchResults() {
             const query = searchInput.value.trim();
             const categoria = categorySelect.value;
+            const admin = currentUri === '/zonaCartas';
 
-            console.log(`Buscando con query="${query}" y categoria=${categoria}`);
+            console.log(`Buscando con query="${query}", categoria=${categoria}, admin=${admin}`);
 
-            fetch(`/buscar?query=${encodeURIComponent(query)}&categoria=${encodeURIComponent(categoria)}`)
+            fetch(`/buscar?query=${encodeURIComponent(query)}&categoria=${encodeURIComponent(categoria)}&admin=${admin}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`Error ${response.status}: ${response.statusText}`);
@@ -19,6 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 })
                 .then(html => {
                     gridContainer.innerHTML = html;
+                    registrarEventos(); // Registrar eventos después de cargar contenido dinámicamente
 
                     const cartas = gridContainer.querySelectorAll('.carta');
                     cartas.forEach((carta, index) => {

@@ -1,5 +1,5 @@
 #cabezera {
-    position: relative;
+    position: fixed; /* Fixed at the top */
     top: 0;
     width: 100%;
     background-color: #007bff;
@@ -10,6 +10,11 @@
     justify-content: space-between;
     align-items: center;
     color: white;
+    padding: 10px 20px; /* Add padding to avoid content overlap */
+}
+
+body {
+    padding-top: 80px; /* Add padding to avoid content overlap with fixed header */
 }
 
 #cabezera .logo {
@@ -199,49 +204,50 @@
 
 .zonaAdmin {
     padding: 10px 20px;
-    background-color: #6f42c1;
-    /* Color morado */
+    background-color: #ff7b00;
+    /* Color complementario del azul */
     color: white;
     /* Texto blanco */
-    border: 1px solid #6f42c1;
+    border: 1px solid #ff7b00;
     /* Borde del mismo color */
     border-radius: 5px;
     font-size: 14px;
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease;
-    box-shadow: 0px 2px 5px rgba(111, 66, 193, 0.2);
+    box-shadow: 0px 2px 5px rgba(255, 123, 0, 0.2);
     /* Sombra con el mismo tono */
 }
 
 /* Hover para el botón de Zona Admin */
 .zonaAdmin:hover {
-    background-color: #5a3799;
-    /* Color más oscuro de morado para el hover */
-    border-color: #5a3799;
+    background-color: #cc6200;
+    /* Color más oscuro de naranja para el hover */
+    border-color: #cc6200;
     /* El borde coincide con el fondo al hacer hover */
     color: white;
     /* Mantiene el texto blanco */
-    box-shadow: 0px 3px 7px rgba(90, 55, 153, 0.3);
+    box-shadow: 0px 3px 7px rgba(204, 98, 0, 0.3);
     /* Sombra más intensa */
 }
 
+
 .añadir-carta {
     padding: 10px 20px;
-    background-color: #6f42c1;
+    background-color: #28a745; /* Color verde */
     color: white;
     border: none;
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0px 3px 8px rgba(111, 66, 193, 0.3);
-    flex: 0.6;
+    box-shadow: 0px 3px 8px rgba(40, 167, 69, 0.3);
+    flex: 1; /* Ensure same size */
+    width: 100%; /* Ensure same size */
 }
 
 .añadir-carta:hover {
-    background-color: #5a3799; 
-    border-color: #5a3799;
-    box-shadow: 0px 4px 12px rgba(90, 55, 153, 0.4);
+    background-color: #218838; /* Hover color verde más oscuro */
+    box-shadow: 0px 4px 12px rgba(33, 136, 56, 0.4);
 }
 
 /* Estilos para el contenedor de botones */
@@ -257,7 +263,7 @@
     margin-bottom: 10px;
 }
 
-.botonInicioSesion, .botonRegistro, .cerrarSesion, .añadir-carta, .admin-zona {
+.botonInicioSesion, .botonRegistro, .cerrarSesion{
     background-color: #007bff;
     color: white;
     padding: 10px 20px;
@@ -268,7 +274,8 @@
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.botonInicioSesion:hover, .botonRegistro:hover, .cerrarSesion:hover, .añadir-carta:hover, .admin-zona:hover {
+.botonInicioSesion:hover, .botonRegistro:hover, .cerrarSesion:hover {
     background-color: #0056b3;
     box-shadow: 0px 4px 12px rgba(0, 123, 255, 0.4);
 }
+

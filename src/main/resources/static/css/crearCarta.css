@@ -4,12 +4,10 @@ body {
     background-color: #f4f4f4;
     margin: 0;
     padding: 0;
-
 }
 
 /* Título del formulario */
 h2 {
-
     text-align: center;
     color: #007bff;
     /* Azul */
@@ -35,8 +33,6 @@ h2 {
     flex-direction: column;
 }
 
-
-
 /* Asegúrate de que los botones tengan el mismo estilo */
 .añadir-carta,
 .añadir-categoria {
@@ -44,8 +40,8 @@ h2 {
     /* Botones de ancho completo */
     padding: 10px;
     /* Espaciado interno */
-    background-color: #6f42c1;
-    /* Color morado */
+    background-color: #28a745;
+    /* Color verde */
     color: white;
     /* Color del texto */
     border: none;
@@ -60,10 +56,9 @@ h2 {
 
 .añadir-carta:hover,
 .añadir-categoria:hover {
-    background-color: #563d7c;
-    /* Morado más oscuro en hover */
+    background-color: #218838;
+    /* Verde más oscuro en hover */
 }
-
 
 /* Estilo de etiquetas y campos de entrada */
 label {
@@ -82,7 +77,8 @@ input[type="number"] {
 
 /* Estilos del input de archivo */
 input[type="file"] {
-    display: none;
+    display: block;
+    margin-top: 10px;
 }
 
 .file-upload-container {
@@ -94,18 +90,18 @@ input[type="file"] {
 
 .custom-file-upload {
     padding: 10px 20px;
-    background-color: #6f42c1;
+    background-color: #007bff; /* Use primary color */
     color: white;
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0px 3px 8px rgba(111, 66, 193, 0.3);
+    box-shadow: 0px 3px 8px rgba(0, 123, 255, 0.3); /* Use primary color with transparency */
 }
 
 .custom-file-upload:hover {
-    background-color: #563d7c;
-    box-shadow: 0px 4px 12px rgba(86, 61, 124, 0.4);
+    background-color: #0056b3; /* Darker shade of primary color */
+    box-shadow: 0px 4px 12px rgba(0, 86, 179, 0.4); /* Darker shade with transparency */
 }
 
 #nombre-archivo {
@@ -119,9 +115,11 @@ input[type="file"] {
 }
 
 /* Estilos para el select de categorías */
-#categorias {
-    width: 90%;
-    height: 150px;
+#categorias,
+.addCategorias,
+.custom-select {
+    width: 100%;
+    height: 250px; /* Increase height */
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -135,7 +133,7 @@ input[type="file"] {
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 5px;
-    min-height: 40px;
+    min-height: 60px; /* Increase min-height */
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
     font-size: 14px;
     color: #333;
@@ -170,4 +168,147 @@ input[type="file"] {
 .select2-container--default .select2-selection--multiple .select2-selection__placeholder {
     color: #aaa;
     font-weight: normal;
+}
+
+/* Estilos para la vista previa de la imagen */
+#imagePreview {
+    display: none;
+    max-width: 20%; /* Reduce the size */
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para el modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+    padding-top: 60px;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 15px rgba(0, 123, 255, 0.4);
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Estilos para el formulario dentro del modal */
+.modal-content form {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-content label {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #333;
+}
+
+.modal-content input[type="text"],
+.modal-content input[type="number"] {
+    width: calc(100% - 22px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+.modal-content button[type="submit"],
+.btn-guardar {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.modal-content button[type="submit"]:hover,
+.btn-guardar:hover {
+    background-color: #0056b3;
+}
+
+/* Estilos para la subida de archivos */
+.custom-file-input {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 5px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+}
+
+.custom-file-input:hover {
+    background-color: #e9ecef;
+}
+
+/* Estilos para la selección de categorías */
+.custom-select {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 5px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+}
+
+.custom-select option.asignada {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.custom-select option.no-asignada {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Estilos para el botón de añadir */
+.btn-add-option {
+    background-color: #28a745; /* Green color */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0px 3px 8px rgba(40, 167, 69, 0.3);
+}
+
+.btn-add-option:hover {
+    background-color: #218838; /* Darker green color */
+    box-shadow: 0px 4px 12px rgba(33, 136, 56, 0.4);
 }

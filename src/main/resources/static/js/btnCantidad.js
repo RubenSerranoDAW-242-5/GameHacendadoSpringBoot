@@ -11,12 +11,17 @@ document.addEventListener('DOMContentLoaded', function () {
             botonesMas.forEach(boton => {
                 boton.addEventListener('click', function () {
                     const idCarta = this.getAttribute('data-id');
-                    const inputCantidad = document.getElementById(`cantidad-${idCarta}-añadir`);
+                    const inputCantidad = document.getElementById(`cantidad-${idCarta}`);
                     if (inputCantidad) {
                         let cantidadActual = parseInt(inputCantidad.value);
-                        cantidadActual++;
-                        inputCantidad.value = cantidadActual;
-                        console.log(`Cantidad aumentada: ${cantidadActual}`);
+                        const maxCantidad = parseInt(inputCantidad.getAttribute('max'));
+                        if (cantidadActual < maxCantidad) {
+                            cantidadActual++;
+                            inputCantidad.value = cantidadActual;
+                            console.log(`Cantidad aumentada: ${cantidadActual}`);
+                        } else {
+                            console.log(`Cantidad máxima alcanzada: ${maxCantidad}`);
+                        }
                     }
                 });
             });
@@ -24,10 +29,9 @@ document.addEventListener('DOMContentLoaded', function () {
             botonesMenos.forEach(boton => {
                 boton.addEventListener('click', function () {
                     const idCarta = this.getAttribute('data-id');
-                    const inputCantidad = document.getElementById(`cantidad-${idCarta}-añadir`);
+                    const inputCantidad = document.getElementById(`cantidad-${idCarta}`);
                     if (inputCantidad) {
                         let cantidadActual = parseInt(inputCantidad.value);
-
                         if (cantidadActual > 1) {
                             cantidadActual--;
                             inputCantidad.value = cantidadActual;
@@ -40,7 +44,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     registrarEventos();
-
 
     const observer = new MutationObserver(() => {
         registrarEventos();

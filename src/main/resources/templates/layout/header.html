@@ -4,7 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-	<link rel="stylesheet" th:href="@{/css/header.css}">
+	
 </head>
 
 <body>
@@ -12,11 +12,11 @@
 		<div class="logo">
 			<a href="/"> <img src="/img/logo.webp" alt="Logo GameHacendado">
 			</a>
-			<h1>GameHacendado</h1>
+			<h1>GameHacnadado</h1>
 		</div>
 
 
-		<form id="buscadorForm" th:action="@{/buscar}" method="get" class="formBusqueda" th:if="${currentUri == '/'}">
+		<form id="buscadorForm" th:action="@{/buscar}" method="get" class="formBusqueda" th:if="${currentUri == '/' or currentUri == '/zonaCartas'}">
 			<div class="search-bar">
 				<input id="searchInput" type="text" name="query" placeholder="Buscar productos...">
 				<select name="categoria" class="categoria-select">
@@ -46,14 +46,11 @@
 	
 				
 			</div>
-			<div class="boton-añadir" th:if="${usuarioAdmin}">
+			<div class="contenedor-admin" th:if="${usuarioAdmin}">
 				<button class="zonaAdmin" onclick="window.location.href='/zonaAdmin'">Zona Admin</button>
-				<button class="añadirProducto" th:if="${currentUri == '/ZonaCartas'}" onclick="window.location.href='/añadirProducto'">Añadir Producto</button>
+				<button class="añadir-carta" th:if="${currentUri == '/zonaCartas'}" onclick="openAddModal()">Añadir Producto</button>
 			</div>
 		</div>
-		
-
-
 	</header>
 </body>
 </html>

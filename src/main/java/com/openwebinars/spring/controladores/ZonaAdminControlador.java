@@ -1,6 +1,10 @@
 package com.openwebinars.spring.controladores;
 
 import java.util.List;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +23,9 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.File;
+import java.io.IOException;
 
 @Controller
 public class ZonaAdminControlador {
@@ -82,6 +89,7 @@ public class ZonaAdminControlador {
 
     @GetMapping("/zonaCartas")
     public String zonaCartas(Model model) {
+
         model.addAttribute("currentUri", "/zonaCartas");
         model.addAttribute("usuarioLogueado", sesion.getAttribute("usuarioLogueado"));
         model.addAttribute("usuarioAdmin", sesion.getAttribute("usuarioAdmin"));
@@ -128,18 +136,52 @@ public class ZonaAdminControlador {
         return "redirect:/zonaCartas";
     }
 
-    @PostMapping("/zonaCartas/addExistencias")
-    public String añadirExistencias(@RequestParam("idCarta") Long idCarta,
-            @RequestParam("cantidad") Integer cantidad) {
-        Carta carta = bdCartas.findById(idCarta);
-        if (carta == null) {
-            return "redirect:/zonaCartas?error=cartaNotFound";
-        }
+    @PostMapping("/zonaCartas/add")
+    public String añadirCarta(@RequestParam("nombre") String nombre,
+            @RequestParam("tipo") String tipo,
+            @RequestParam("coste") String coste,
+            @RequestParam("color") String color,
+            @RequestParam("codigo") String codigo,
+            @RequestParam("precio") Integer precio,
+            @RequestParam("cantidad") Integer cantidad,
+            @RequestParam("imagen") MultipartFile imagen,
+            @RequestParam("categorias") String categoriasIds) {
+        Carta nuevaCarta = new Carta();
+        nuevaCarta.setNombreCarta(nombre);
+        nuevaCarta.setTipoCarta(tipo);
+        nuevaCarta.setCosteCarta(coste);
+        nuevaCarta.setColor(color);
+        nuevaCarta.setCodigoCarta(codigo);
+        nuevaCarta.setPrecioCarta(precio);
+        nuevaCarta.setCantidad(cantidad);
 
-        carta.setCantidad(carta.getCantidad() + cantidad);
-        // hacer que cargue vista de creacion de carta 
+        // Guardar la imagen
+        if (!imagen.isEmpty()) {
+            try {
+                String nombreImagen = imagen.getOriginalFilename();
+                String rutaImagen = "src/main/resources/static/img/" + nombreImagen;
+                File archivoImagen = new File(rutaImagen);
+                imagen.transferTo(archivoImagen);
+                nuevaCarta.setImg(nombreImagen);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        List<Long> Listacategorias = Arrays.stream(categoriasIds.split(","))
+                .map(Long::parseLong)
+                .collect(Collectors.toList());
+        // Asociar categorías
+        Set<Categorias> categorias = new HashSet<>();
+        for (Long categoriaId : Listacategorias) {
+            Categorias categoria = bdCategoria.findById(categoriaId);
+            if (categoria != null) {
+                categorias.add(categoria);
+            }
+        }
+        nuevaCarta.setCategorias(categorias);
+
         // Guardar la carta en la base de datos
-        bdCartas.edit(carta);
+        bdCartas.add(nuevaCarta);
 
         return "redirect:/zonaCartas";
     }
