@@ -4,6 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{/css/header.css}">
 </head>
 
 <body>
@@ -14,36 +15,45 @@
 			<h1>GameHacendado</h1>
 		</div>
 
-		<form id="buscadorForm" th:action="@{/buscar}" method="get" class="formBusqueda">
+
+		<form id="buscadorForm" th:action="@{/buscar}" method="get" class="formBusqueda" th:if="${currentUri == '/'}">
 			<div class="search-bar">
 				<input id="searchInput" type="text" name="query" placeholder="Buscar productos...">
 				<select name="categoria" class="categoria-select">
 					<option value="">Todas las categorías</option>
-					 <option th:each="categoria : ${categorias}" th:value="${categoria.id}" th:text="${categoria.categoria}"></option>
+					<option th:each="categoria : ${categorias}" th:value="${categoria.id}"
+						th:text="${categoria.categoria}"></option>
 				</select>
 			</div>
 			<script th:src="@{/js/buscador.js}"></script>
 		</form>
 
-		<div class="boton-login" th:if="${!usuarioLogueado }">
-			<button class="botonInicioSesion" onclick="window.location.href='/login'">Iniciar Sesión</button>
-			<button class="botonRegistro" onclick="window.location.href='registro'">Registrarse</button>
-		</div>
-		<div class="icons" th:if="${usuarioLogueado || usuarioLogueado==null}">
-			<a href="/perfil" class="iconoUsuario"> <img src="/img/iconoUsuario.webp" alt="Icono Usuario">
-			</a> <a href="/carrito" class="iconoCarrito"> <img src="img/carrito.webp" alt="Icono Carrito">
-				<span th:id="contador-carrito" th:text="${contador_carrito}" id="contador-carro">0</span>
-			</a>
-			<button class="cerrarSesion" th:if="${usuarioLogueado}"
-				onclick="window.location.href='../login?logout=true'">Cerrar Sesión</button>
-		</div>
+		<div class="botones-container">
+			<div th:if="${currentUri == '/'}">
 
-		<div class="boton-añadir" th:if="${usuarioAdmin}">
-			<button class="añadir-carta" onclick="window.location.href='crearCarta.php'">Añadir
-				Nueva Carta</button>
+				<div class="boton-login" th:if="${!usuarioLogueado}">
+					<button class="botonInicioSesion" onclick="window.location.href='/login'">Iniciar Sesión</button>
+					<button class="botonRegistro" onclick="window.location.href='registro'">Registrarse</button>
+				</div>
+				<div class="icons" th:if="${usuarioLogueado}">
+					<a href="/perfil" class="iconoUsuario"> <img src="/img/iconoUsuario.webp" alt="Icono Usuario">
+					</a> <a href="/carrito" class="iconoCarrito"> <img src="img/carrito.webp" alt="Icono Carrito">
+						<span th:id="contador-carrito" th:text="${contador_carrito}" id="contador-carro">0</span>
+					</a>
+					<button class="cerrarSesion" th:if="${usuarioLogueado}"
+						onclick="window.location.href='../login?logout=true'">Cerrar Sesión</button>
+				</div>
+	
+				
+			</div>
+			<div class="boton-añadir" th:if="${usuarioAdmin}">
+				<button class="zonaAdmin" onclick="window.location.href='/zonaAdmin'">Zona Admin</button>
+				<button class="añadirProducto" th:if="${currentUri == '/ZonaCartas'}" onclick="window.location.href='/añadirProducto'">Añadir Producto</button>
+			</div>
 		</div>
+		
+
 
 	</header>
 </body>
-
 </html>

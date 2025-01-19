@@ -20,7 +20,10 @@ public class PerfilControlador {
     private UsuarioServicio bdUsuario;
 
     @Autowired
-	private HttpSession sesion;
+    private HttpSession sesion;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @GetMapping("/perfil")
     public String getMethodName(Model model) {
@@ -33,8 +36,7 @@ public class PerfilControlador {
     public String postMethodName(@ModelAttribute("nombre") String nombre, @ModelAttribute("apellido") String apellido,
             @ModelAttribute("email") String email, @ModelAttribute("dni") String dni,
             @ModelAttribute("contraseña") String contraseña,
-            @ModelAttribute("direccion") String direccion, @ModelAttribute("telefono") String telefono,
-            BCryptPasswordEncoder passwordEncoder) {
+            @ModelAttribute("direccion") String direccion, @ModelAttribute("telefono") String telefono) {
 
         Usuario u = bdUsuario.findById((Long) sesion.getAttribute("id"));
 
@@ -43,8 +45,8 @@ public class PerfilControlador {
         u.setEmail(email);
         u.setDni(dni);
         if (contraseña != null) {
-            contraseña = passwordEncoder.encode(contraseña);
-            u.setContraseña(contraseña);
+            String contraseñaCod = passwordEncoder.encode(contraseña);
+            u.setContraseña(contraseñaCod);
         }
         u.setDireccion(direccion);
         u.setTelefono(telefono);

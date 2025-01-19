@@ -4,24 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Gestión de Usuarios</title>
-    <link rel="stylesheet" href="../assets/css/zonaUsuario.css">
+    <head th:replace="layout/head::head"></head>
 
 </head>
 
 <body>
-    <?php
-    $bd->conectar();
+    <div th:replace="/layout/header :: header"></div>
 
-    $query = "SELECT * FROM Usuario";
-    $resultado = $bd->querySelectMuchos($query);
-
-    $bd->desconectar();
-    ?>
-
-    <h1>Lista de Usuarios</h1>
+    <h1 class="titulo">Lista de Usuarios</h1>
 
     <div class="contenedor-tabla">
-        <table>
+        <table class="tabla-usuarios">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -35,80 +28,62 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($resultado as $usuario): ?>
-                    <tr>
-                        <td><?php echo $usuario['id']; ?></td>
-                        <td><?php echo $usuario['nombre']; ?></td>
-                        <td><?php echo $usuario['apellido']; ?></td>
-                        <td><?php echo $usuario['email']; ?></td>
-                        <td><?php echo $usuario['dni']; ?></td>
-                        <td><?php echo $usuario['direccion']; ?></td>
-                        <td><?php echo $usuario['telefono']; ?></td>
-                        <td>
-                            <a href="?edit=<?php echo $usuario['id']; ?>">Editar</a>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
+                <tr th:each="usuario : ${usuario}">
+                    <td th:text="${usuario.id}"></td>
+                    <td th:text="${usuario.nombre}"></td>
+                    <td th:text="${usuario.apellido}"></td>
+                    <td th:text="${usuario.email}"></td>
+                    <td th:text="${usuario.dni}"></td>
+                    <td th:text="${usuario.direccion}"></td>
+                    <td th:text="${usuario.telefono}"></td>
+                    <td>
+                        <a th:href="@{|/zonaUsuarios?edit=${usuario.id}|}" class="btn-editar">Editar</a>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
 
-    <?php if (isset($_GET['edit'])): ?>
-        <?php
-
-        $bd->conectar();
-
-        $idEditar = $_GET['edit'];
-
-        $query = "SELECT * FROM Usuario WHERE id = $idEditar";
-        $usuarioEditar = $bd->querySelectUno($query);
-
-        $bd->desconectar();
-        ?>
-
-
+    <div th:if="${edit}">
         <div class="contenedor-tabla-editar">
+            <h2 class="titulo-editar">Editar Usuario</h2>
+            <form th:action="@{/zonaUsuarios/edit}" method="post" class="form-editar">
+                <input type="hidden" name="id" th:value="${usuarioEditar.id}">
 
-            <h2>Editar Usuario</h2>
-            <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
+                <label for="nombre" class="label">Nombre:</label>
+                <input type="text" name="nombre" th:value="${usuarioEditar.nombre}" class="input" required>
 
-                <input type="hidden" name="id" value="<?php echo $usuarioEditar['id']; ?>">
+                <label for="apellido" class="label">Apellido:</label>
+                <input type="text" name="apellido" th:value="${usuarioEditar.apellido}" class="input" required>
 
-                <label for="nombre">Nombre:</label>
-                <input type="text" name="nombre" value="<?php echo $usuarioEditar['nombre']; ?>" required>
+                <label for="email" class="label">Email:</label>
+                <input type="email" name="email" th:value="${usuarioEditar.email}" class="input" required>
 
-                <label for="apellido">Apellido:</label>
-                <input type="text" name="apellido" value="<?php echo $usuarioEditar['apellido']; ?>" required>
+                <label for="dni" class="label">DNI:</label>
+                <input type="text" name="dni" th:value="${usuarioEditar.dni}" class="input" required>
 
-                <label for="email">Email:</label>
-                <input type="email" name="email" value="<?php echo $usuarioEditar['email']; ?>" required>
+                <label for="direccion" class="label">Dirección:</label>
+                <input type="text" name="direccion" th:value="${usuarioEditar.direccion}" class="input" required>
 
-                <label for="dni">DNI:</label>
-                <input type="text" name="dni" value="<?php echo $usuarioEditar['dni']; ?>" required>
-
-                <label for="direccion">Dirección:</label>
-                <input type="text" name="direccion" value="<?php echo $usuarioEditar['direccion']; ?>" required>
-
-                <label for="telefono">Teléfono:</label>
-                <input type="text" name="telefono" value="<?php echo $usuarioEditar['telefono']; ?>" required>
+                <label for="telefono" class="label">Teléfono:</label>
+                <input type="text" name="telefono" th:value="${usuarioEditar.telefono}" class="input" required>
 
                 <div>
-                    <label for="rol">Rol:</label>
-                    <select name="rol" class="rol" required>
-                        <option value="admin" <?php echo ($usuarioEditar['rol'] == 'admin') ? 'selected' : ''; ?>>Administrador</option>
-                        <option value="usuario" <?php echo ($usuarioEditar['rol'] == 'usuario') ? 'selected' : ''; ?>>Usuario</option>
+                    <label for="rol" class="label">Rol:</label>
+                    <select name="rol" class="rol">
+                        <option value="" disabled selected>Elige un rol</option>
+                        <option value="admin" th:selected="${usuarioEditar.rol == 'admin'}">Administrador</option>
+                        <option value="usuario" th:selected="${usuarioEditar.rol == 'usuario'}">Usuario</option>
                     </select>
                 </div>
 
-                <button type="submit">Actualizar Usuario</button>
-
-                <a href="zonaUsuarios.php">Cancelar</a>
+                <button type="submit" class="btn-actualizar">Actualizar Usuario</button>
+                <a th:href="@{/zonaUsuarios}" class="btn-cancelar">Cancelar</a>
             </form>
-
         </div>
-    <?php endif; ?>
+    </div>
 
 </body>
-<?php include "../includes/footer.php"; ?>
+<div th:replace="layout/footer :: footer"></div>
 
 </html>

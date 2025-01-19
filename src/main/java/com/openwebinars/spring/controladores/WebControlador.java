@@ -83,40 +83,38 @@ public class WebControlador {
     }
 
     @GetMapping("/buscar")
-public String buscarCartas(@RequestParam(required = false) String query, 
-                           @RequestParam(required = false) Long categoria, 
-                           Model model) {
+    public String buscarCartas(@RequestParam(required = false) String query,
+            @RequestParam(required = false) Long categoria,
+            Model model) {
 
-    List<Carta> resultados;
+        List<Carta> resultados;
 
-    // Caso 1: Si no hay query ni categoría
-    if ((query == null || query.isEmpty()) && (categoria == null || categoria == 0)) {
-        resultados = bdCarta.findAll();
-    }
-    // Caso 2: Si hay solo categoría
-    else if (query == null || query.isEmpty()) {
-        resultados = bdCarta.findByCategoria(categoria);
-    }
-    // Caso 3: Si hay solo query
-    else if (categoria == null || categoria == 0) {
-        resultados = bdCarta.findByAll(query);
-    }
-    // Caso 4: Si hay query y categoría
-    else {
-        resultados = bdCarta.findByAllAndCategoria(query, categoria);
-    }
+        // Caso 1: Si no hay query ni categoría
+        if ((query == null || query.isEmpty()) && (categoria == null || categoria == 0)) {
+            resultados = bdCarta.findAll();
+        }
+        // Caso 2: Si hay solo categoría
+        else if (query == null || query.isEmpty()) {
+            resultados = bdCarta.findByCategoria(categoria);
+        }
+        // Caso 3: Si hay solo query
+        else if (categoria == null || categoria == 0) {
+            resultados = bdCarta.findByAll(query);
+        }
+        // Caso 4: Si hay query y categoría
+        else {
+            resultados = bdCarta.findByAllAndCategoria(query, categoria);
+        }
 
-    
-    if (resultados.isEmpty()) {
-        model.addAttribute("mensaje", "No se encontraron cartas que coincidan con la búsqueda.");
+        if (resultados.isEmpty()) {
+            model.addAttribute("mensaje", "No se encontraron cartas que coincidan con la búsqueda.");
+        }
+
+        model.addAttribute("cartas", resultados);
+        model.addAttribute("usuarioLogueado",
+                sesion.getAttribute("usuarioLogueado") != null ? sesion.getAttribute("usuarioLogueado") : false);
+
+        return "layout/resultado";
     }
-
-    
-    model.addAttribute("cartas", resultados);
-    model.addAttribute("usuarioLogueado", 
-        sesion.getAttribute("usuarioLogueado") != null ? sesion.getAttribute("usuarioLogueado") : false);
-
-    return "layout/resultado";
-}
 
 }

@@ -5,105 +5,88 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../assets/css/zonaCartas.css">
-    <script src="../assets/js/zonaCartas.js" defer></script>
-    <?php
+    <link rel="stylesheet" th:href="@{/css/zonaCartas.css}">
 
-    session_start();
-
-    include '../includes/header.php';
-
-    if (isset($_SESSION["email"])) {
-        $idUsuario = $_SESSION['id'];
-    }
-
-
-    $bd->conectar();
-
-    $query = "SELECT * FROM Carta";
-    $listadoCartas = $bd->querySelectMuchos($query);
-
-    $bd->desconectar();
-
-
-
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-        $metodo = $_POST['metodoPost'];
-
-        switch ($metodo) {
-
-            case 'añadirExistencia':
-
-                $bd->conectar();
-
-                $idCarta = $_POST['idCarta'];
-                $cantidadAñadir = $_POST["cantidad-$idCarta-añadir"];
-
-
-                $query = "UPDATE carta SET cantidad = cantidad + $cantidadAñadir WHERE id = $idCarta";
-
-                $resultado = $bd->queryUpdate($query);
-
-                header("Location: ../admin/zonaCartas.php");
-
-                break;
-            case 'busqueda':
-
-                include "../includes/busqueda.php";
-
-                break;
-            default:
-                echo "error al recibir el metodo del post";
-                break;
-        }
-    }
-    ?>
+    <head th:replace="layout/head::head"></head>
 </head>
 
 <body>
+    <div th:replace="/layout/header :: header"></div>
 
-    <div id="flex-box">
+    <div id="flex-box" class="flex-box">
+        <div id="grid" class="grid">
+            <div th:each="carta : ${listadoCartas}" class="carta">
+                <img th:src="@{/img/{img}(img=${carta.img})}" th:alt="${carta.nombreCarta}" class="carta-img">
+                <h3 th:text="${carta.nombreCarta}"></h3>
+                <p>Tipo: <span th:text="${carta.tipoCarta}"></span></p>
+                <p>Coste: <span th:text="${carta.costeCarta}"></span></p>
+                <p>Color: <span th:text="${carta.color}"></span></p>
+                <p>Código: <span th:text="${carta.codigoCarta}"></span></p>
+                <p id="precioCarta">Precio: <span th:text="${#numbers.formatDecimal(carta.precioCarta, 1, 2)}"></span>€</p>
+                <p id="cantidad-carta">Cantidad: <span th:text="${carta.cantidad}"></span></p>
 
-        <div id="grid">
-            <?php foreach ($listadoCartas as $carta): ?>
+                <a href="#" class="boton-editar" th:data-id="${carta.id}"
+                    onclick="openModal(this); return false;">Editar Carta</a>
 
-                <div class="carta" hr>
-                    <img src="<?php echo "../assets/images/" . $carta['img']; ?>" alt="<?php echo $carta['nombreCarta']; ?>"
-                        class="carta-img">
-                    <h3><?php echo htmlspecialchars($carta['nombreCarta']); ?></h3>
-                    <p>Tipo: <?php echo htmlspecialchars($carta['tipoCarta']); ?></p>
-                    <p>Coste: <?php echo htmlspecialchars($carta['costeCarta']); ?></p>
-                    <p>Color: <?php echo htmlspecialchars($carta['color']); ?></p>
-                    <p>Código: <?php echo htmlspecialchars($carta['codigoCarta']); ?></p>
-                    <p id="precioCarta">Precio: <?php echo number_format($carta['precioCarta'], 2); ?>€</p>
-                    <p id="cantidad-carta">Cantidad: <?php echo $carta['cantidad']; ?></p>
+                <form th:action="@{/zonaCartas/addExistencias}" method="post" class="form-añadir">
+                    <div class="cantidad-controles-añadir">
 
-                    <a href="../admin/zonaEditarCarta.php?edit=<?php echo $carta['id']; ?>" class="boton-editar">Editar Carta</a>
+                        <button type="button" class="btn-menos" th:data-id="${carta.id}">-</button>
 
-                    <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
+                        <input type="number" th:id="'cantidad-' + ${carta.id} + '-añadir'" min="1"
+                            th:name="cantidad" value="1" readonly>
 
-                        <div class="cantidad-controles-añadir">
-                            <button type="button" class="btn-menos" data-id="<?php echo $carta['id']; ?>">-</button>
-                            <input type="number" id="cantidad-<?php echo $carta['id']; ?>-añadir" min="1"
-                                name="cantidad-<?php echo $carta['id']; ?>-añadir" value="1" readonly>
-                            <button type="button" class="btn-mas" data-id="<?php echo $carta['id']; ?>">+</button>
-                        </div>
+                        <button type="button" class="btn-mas" th:data-id="${carta.id}">+</button>
 
-                        <input type="hidden" value="añadirExistencia" name="metodoPost">
-                        <input type="hidden" name="idCarta" value="<?php echo $carta['id']; ?>">
-                        <button type="submit">Añadir existencias</button>
-                    </form>
-                    <br>
-                </div>
+                    </div>
+                    <input type="hidden" name="idCarta" th:value="${carta.id}">
+                    <button type="submit" class="btn-añadir">Añadir existencias</button>
+                </form>
+                <br>
+            </div>
+        </div>
+    </div>
 
-            <?php endforeach; ?>
+    <!-- Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Editar Carta</h2>
+            <form th:action="@{/zonaCartas/edit}" method="post" id="editForm">
+                <input type="hidden" name="id" id="editId">
 
+                <label for="nombre">Nombre:</label>
+                <input type="text" name="nombre" id="editNombre" required>
+
+                <label for="tipo">Tipo:</label>
+                <input type="text" name="tipo" id="editTipo" required>
+
+                <label for="coste">Coste:</label>
+                <input type="text" name="coste" id="editCoste" required>
+
+                <label for="color">Color:</label>
+                <input type="text" name="color" id="editColor" required>
+
+                <label for="codigo">Código:</label>
+                <input type="text" name="codigo" id="editCodigo" required>
+
+                <label for="precio">Precio:</label>
+                <input type="number" step="0.01" name="precio" id="editPrecio" required>
+
+                <label for="cantidad">Cantidad:</label>
+                <input type="number" name="cantidad" id="editCantidad" required>
+
+                <button type="submit" class="btn-actualizar">Actualizar Carta</button>
+            </form>
 
         </div>
     </div>
-</body>
 
-<?php include '../includes/footer.php'; ?>
+    <a href="/zonaCartas/nuevaCarta" class="btn-nueva-carta">Añadir nueva carta</a>
+
+    <script th:src="@{/js/btnCantidad.js}"></script>
+    <script th:src="@{/js/modal.js}"></script>
+    <div th:replace="layout/footer :: footer"></div>
+</body>
 
 </html>

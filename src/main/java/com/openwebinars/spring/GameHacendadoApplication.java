@@ -29,7 +29,7 @@ public class GameHacendadoApplication {
 			if (usuarioRepositorio.count() == 0 && categoriaRepositorio.count() == 0 && cartaRepositorio.count() == 0) {
 
 				usuarioRepositorio.save(new Usuario("Juan", "Pérez", "juan.perez@example.com", "12345678A",
-						passwordEncoder.encode("password123"), "admin",
+						passwordEncoder.encode("123"), "admin",
 						"Calle Falsa 123, Madrid", "+34 600 123 456"));
 				usuarioRepositorio.save(new Usuario("Ana", "García", "ana.garcia@example.com", "87654321B",
 						passwordEncoder.encode("123"),
