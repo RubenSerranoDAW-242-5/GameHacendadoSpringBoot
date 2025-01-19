@@ -2,8 +2,6 @@ package com.openwebinars.spring.controladores;
 
 import java.util.List;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -159,10 +157,11 @@ public class ZonaAdminControlador {
         if (!imagen.isEmpty()) {
             try {
                 String nombreImagen = imagen.getOriginalFilename();
-                String rutaImagen = "src/main/resources/static/img/" + nombreImagen;
+                String rutaImagen = new File("src/main/resources/static/img/" + nombreImagen).getAbsolutePath();
                 File archivoImagen = new File(rutaImagen);
                 imagen.transferTo(archivoImagen);
                 nuevaCarta.setImg(nombreImagen);
+                System.out.println("Imagen guardada en: " + rutaImagen);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -170,15 +169,13 @@ public class ZonaAdminControlador {
         List<Long> Listacategorias = Arrays.stream(categoriasIds.split(","))
                 .map(Long::parseLong)
                 .collect(Collectors.toList());
-        // Asociar categorías
-        Set<Categorias> categorias = new HashSet<>();
+
         for (Long categoriaId : Listacategorias) {
             Categorias categoria = bdCategoria.findById(categoriaId);
             if (categoria != null) {
-                categorias.add(categoria);
+                categoria.addCarta(nuevaCarta);
             }
         }
-        nuevaCarta.setCategorias(categorias);
 
         // Guardar la carta en la base de datos
         bdCartas.add(nuevaCarta);
@@ -186,3 +183,4 @@ public class ZonaAdminControlador {
         return "redirect:/zonaCartas";
     }
 }
+
