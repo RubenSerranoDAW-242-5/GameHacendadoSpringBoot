@@ -46,7 +46,7 @@
 	
 				
 			</div>
-			<div class="contenedor-admin" th:if="${usuarioAdmin}">
+			<div class="contenedor-admin" th:if="${usuarioAdmin and currentUri != '/zonaAdmin'}">
 				<button class="zonaAdmin" onclick="window.location.href='/zonaAdmin'">Zona Admin</button>
 				<button class="añadir-carta" th:if="${currentUri == '/zonaCartas'}" onclick="openAddModal()">Añadir Producto</button>
 			</div>
